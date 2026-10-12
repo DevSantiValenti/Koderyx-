@@ -1,0 +1,10 @@
+---
+import { processSteps } from '../data/content';
+---
+<section id="proceso" class="section process-section" aria-labelledby="process-title">
+  <div class="container">
+    <div class="section-heading"><div><div class="eyebrow"><span class="section-index">03 /</span> UN CAMINO CLARO</div><h2 id="process-title">De la idea a producción<span class="lime">.</span></h2></div><p>Sabés dónde estamos, qué sigue y por qué. Trabajamos con vos en cada etapa.</p></div>
+    <ol class="process-timeline">{processSteps.map((step, i) => <li><div class="step-marker">{String(i + 1).padStart(2, '0')}</div><h3>{step.title}</h3><p>{step.description}</p></li>)}</ol>
+    <div class="process-note"><span class="status-dot"></span> El alcance se acuerda antes de empezar. Los avances se conversan durante todo el proceso.</div>
+  </div>
+</section>

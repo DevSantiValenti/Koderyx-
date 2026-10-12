@@ -1,0 +1,62 @@
+---
+import '@fontsource-variable/manrope';
+import manropeLatin from '@fontsource-variable/manrope/files/manrope-latin-wght-normal.woff2?url';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppButton from '../components/WhatsAppButton.astro';
+import GoogleAnalytics from '../components/GoogleAnalytics.astro';
+import { site } from '../config/site';
+interface Props { title: string; description: string; noindex?: boolean; schema?: Record<string, unknown> | Record<string, unknown>[]; }
+const { title, description, noindex = false, schema = [] } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const canonical = new URL(path, site.domain).href;
+const image = new URL('/images/og-koderyx.jpg', site.domain).href;
+const graph = [
+  { '@type': 'Organization', '@id': `${site.domain}/#organization`, name: site.name, url: site.domain, logo: `${site.domain}/images/koderyx-logo-original.png`, ...(site.email ? { email: site.email } : {}), ...(site.whatsapp ? { telephone: `+${site.whatsapp}` } : {}), sameAs: [site.instagram].filter(Boolean) },
+  { '@type': 'WebSite', '@id': `${site.domain}/#website`, name: site.name, url: site.domain, inLanguage: 'es-AR', publisher: { '@id': `${site.domain}/#organization` } },
+  ...(Array.isArray(schema) ? schema : [schema]),
+];
+---
+<!doctype html>
+<html lang="es-AR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline>document.documentElement.classList.add('menu-ready');</script>
+    <meta name="theme-color" content="#10120f" />
+    <link rel="preload" href={manropeLatin} as="font" type="font/woff2" crossorigin />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_AR" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Logo oficial de KODERYX · Software Solutions" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image:alt" content="Logo oficial de KODERYX · Software Solutions" />
+    <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c')} />
+    <GoogleAnalytics />
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <Header />
+    <main id="contenido"><slot /></main>
+    <Footer />
+    <WhatsAppButton />
+    <script>import '../scripts/analytics';</script>
+  </body>
+</html>

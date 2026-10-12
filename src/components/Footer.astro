@@ -1,0 +1,16 @@
+---
+import Brand from './Brand.astro';
+import Icon from './Icon.astro';
+import { site, whatsappUrl } from '../config/site';
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div><Brand footer /><p>Ideas claras.<br />Software que las hace posibles.</p></div>
+      <div class="footer-links"><h2>Explorá</h2><a href="/">Inicio</a><a href="/servicios">Servicios</a><a href="/proyectos">Proyectos</a></div>
+      <div class="footer-links"><h2>Conocenos</h2><a href="/#proceso">Proceso</a><a href="/#nosotros">Sobre Koderyx</a><a href="/contacto">Contacto</a></div>
+      <div class="footer-links"><h2>Conectemos</h2>{site.instagram && <a href={site.instagram} target="_blank" rel="noopener noreferrer">Instagram <Icon name="diagonal" size={14} /></a>}{whatsappUrl && <a href={whatsappUrl} data-event="click_whatsapp" target="_blank" rel="noopener noreferrer">WhatsApp <Icon name="diagonal" size={14} /></a>}{site.email && <a href={`mailto:${site.email}`}>Email <Icon name="diagonal" size={14} /></a>}<span class="domain">koderyx.com.ar</span></div>
+    </div>
+    <div class="footer-bottom"><span>© {new Date().getFullYear()} Koderyx. Todos los derechos reservados.</span><a href="/privacidad">Política de privacidad</a><span class="footer-signature">HECHO CON PROPÓSITO <span>↗</span></span></div>
+  </div>
+</footer>

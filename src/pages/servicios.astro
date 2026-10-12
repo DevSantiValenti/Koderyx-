@@ -1,0 +1,14 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Services from '../sections/Services.astro';
+import Process from '../sections/Process.astro';
+import CallToAction from '../components/CallToAction.astro';
+import Icon from '../components/Icon.astro';
+import { services } from '../data/services';
+import { site } from '../config/site';
+const schema = services.map(service => ({ '@type': 'Service', name: service.title, description: service.description, url: `${site.domain}/servicios#${service.id}`, provider: { '@id': `${site.domain}/#organization` } }));
+---
+<Layout title="Servicios de desarrollo web, ecommerce y software | KODERYX" description="Páginas web, tiendas online, sistemas a medida, integraciones y paneles administrativos. Conocé las soluciones de desarrollo de software de KODERYX." schema={schema}>
+  <section class="page-intro container"><a class="breadcrumb" href="/">Inicio <span>/ Servicios</span></a><div class="eyebrow">DESARROLLO FULL STACK</div><h1>Un desafío real.<br /><span class="lime">La solución que necesitás.</span></h1><p>De una primera página web a un sistema que organiza toda tu operación. Diseñamos y desarrollamos herramientas con un propósito concreto.</p><a class="text-link" href="/contacto" data-event="click_presupuesto">Solicitar presupuesto <Icon name="diagonal" size={18} /></a></section>
+  <Services detailed /><Process /><CallToAction />
+</Layout>

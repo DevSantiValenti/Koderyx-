@@ -1,0 +1,16 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { site, whatsappUrl } from '../config/site';
+---
+<Layout title="Política de privacidad | KODERYX" description="Conocé cómo KODERYX utiliza los datos de contacto enviados mediante su sitio web, las herramientas de analítica y cómo consultar por tu información.">
+  <article class="container legal-page"><a class="breadcrumb" href="/">Inicio <span>/ Privacidad</span></a><div class="eyebrow">TU INFORMACIÓN</div><h1>Política de privacidad<span class="lime">.</span></h1>
+    <p>Esta política describe el tratamiento de información en el sitio de KODERYX, {site.domain}.</p>
+    <h2>Qué información recibimos</h2><p>Cuando completás el formulario de contacto, recibimos tu nombre, email, mensaje y tipo de proyecto. También recibimos los datos opcionales que decidas compartir: empresa, WhatsApp y presupuesto estimado.</p>
+    <h2>Para qué la utilizamos</h2><p>Usamos esta información para responder tu consulta, evaluar el proyecto y coordinar una posible propuesta. El formulario no te suscribe a comunicaciones comerciales. No incluyas contraseñas, datos de pago ni información sensible.</p>
+    <h2>Cómo se procesa tu consulta</h2><p>El alojamiento y la recepción del formulario utilizan Netlify. Los datos que enviás se procesan a través de Netlify Forms y pueden almacenarse fuera de Argentina. Podés consultar las prácticas del proveedor en su <a href="https://www.netlify.com/privacy/" target="_blank" rel="noopener noreferrer">política de privacidad</a>.</p>
+    <h2>Analítica del sitio</h2><p>Cuando está configurado, el sitio utiliza Google Analytics 4 para conocer las páginas visitadas y las interacciones con los enlaces y el formulario. Puede utilizar cookies y datos del dispositivo. No enviamos a Analytics tu nombre, email, teléfono ni el texto de tu consulta. Podés limitar las cookies desde tu navegador. Consultá la <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">política de privacidad de Google</a>.</p>
+    <h2>Enlaces a otros servicios</h2><p>Si elegís contactarnos por WhatsApp, visitar Instagram o abrir un proyecto, accedés a servicios externos con sus propias políticas de privacidad.</p>
+    <h2>Conservación y consultas</h2><p>La información se conserva durante el tiempo necesario para gestionar la consulta y la relación que pudiera surgir. Podés solicitar información, corrección o eliminación de tus datos a través de <a href="/contacto">nuestro formulario de contacto</a>{whatsappUrl && <> o por <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" data-event="click_whatsapp">WhatsApp</a></>}. Evaluaremos cada solicitud considerando las obligaciones aplicables.</p>
+    <h2>Actualizaciones</h2><p>Esta página puede actualizarse cuando cambien las herramientas o el uso de los datos del sitio. La versión publicada aquí es la vigente.</p>
+  </article>
+</Layout>

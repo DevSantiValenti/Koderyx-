@@ -1,0 +1,47 @@
+---
+import Brand from './Brand.astro';
+import Icon from './Icon.astro';
+import { navigation } from '../config/site';
+const pathname = Astro.url.pathname;
+---
+<header class="site-header">
+  <div class="container header-inner">
+    <Brand />
+    <button class="menu-toggle" aria-label="Abrir menú de navegación" aria-expanded="false" aria-controls="main-navigation" hidden>
+      <span></span><span></span>
+    </button>
+    <nav id="main-navigation" class="main-nav" aria-label="Navegación principal">
+      {navigation.map((item) => <a href={item.href} class:list={{ active: item.href === '/' && pathname === '/' }} aria-current={item.href === '/' && pathname === '/' ? 'page' : undefined}>{item.label}</a>)}
+      <a class="button button-small" href="/contacto" data-event="click_presupuesto">Solicitar presupuesto <Icon name="diagonal" size={16} /></a>
+    </nav>
+  </div>
+</header>
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const nav = document.querySelector<HTMLElement>('#main-navigation');
+  if (toggle && nav) {
+    toggle.hidden = false;
+    const close = () => {
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Abrir menú de navegación');
+      nav.classList.remove('is-open');
+    };
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Cerrar menú de navegación' : 'Abrir menú de navegación');
+      nav.classList.toggle('is-open', open);
+    });
+    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') { close(); toggle.focus(); }
+    });
+    document.addEventListener('click', event => {
+      if (event.target instanceof Node && !nav.contains(event.target) && !toggle.contains(event.target)) close();
+    });
+    document.addEventListener('focusin', event => {
+      if (event.target instanceof Node && !nav.contains(event.target) && !toggle.contains(event.target)) close();
+    });
+    matchMedia('(min-width: 1000px)').addEventListener('change', close);
+  }
+</script>

@@ -1,0 +1,17 @@
+---
+import { services } from '../data/services';
+import Icon from '../components/Icon.astro';
+interface Props { detailed?: boolean; }
+const { detailed = false } = Astro.props;
+---
+<section id="servicios" class="section services-section" aria-labelledby="services-title">
+  <div class="container">
+    <div class="section-heading"><div><div class="eyebrow"><span class="section-index">01 /</span> LO QUE HACEMOS</div><h2 id="services-title">Soluciones para cada<br />etapa de tu negocio<span class="lime">.</span></h2></div><p>La tecnología correcta para lo que necesitás hoy. Una base sólida para lo que viene después.</p></div>
+    <div class="services-grid">{services.map(service => <article class="service-card" id={service.id}>
+      <div class="service-top"><span class="service-icon"><Icon name={service.icon} size={25} /></span><span class="item-number">{service.number}</span></div>
+      <h3>{service.title}</h3><p>{service.description}</p>
+      {detailed && <ul class="service-features">{service.features.map(feature => <li><Icon name="check" size={14} />{feature}</li>)}</ul>}
+      <a class="text-link" href={`/contacto?tipo=${encodeURIComponent(service.type)}`} data-event="click_presupuesto" aria-label={`Consultar por ${service.title}`}>Consultar <Icon name="diagonal" size={17} /></a>
+    </article>)}</div>
+  </div>
+</section>

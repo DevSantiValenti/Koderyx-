@@ -1,0 +1,16 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../sections/Hero.astro';
+import Services from '../sections/Services.astro';
+import Projects from '../sections/Projects.astro';
+import Process from '../sections/Process.astro';
+import About from '../sections/About.astro';
+import FAQ from '../sections/FAQ.astro';
+import Contact from '../sections/Contact.astro';
+import { services } from '../data/services';
+import { site } from '../config/site';
+const schema = services.map(service => ({ '@type': 'Service', name: service.title, description: service.description, url: `${site.domain}/servicios#${service.id}`, provider: { '@id': `${site.domain}/#organization` } }));
+---
+<Layout title="KODERYX | Desarrollo web y software a medida" description="Desarrollamos páginas web profesionales, ecommerce y sistemas de gestión a medida. De la idea a producción, con comunicación directa. Hablemos de tu proyecto." schema={schema}>
+  <Hero /><Services /><Projects /><Process /><About /><FAQ /><Contact />
+</Layout>

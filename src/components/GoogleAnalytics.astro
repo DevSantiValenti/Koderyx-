@@ -1,0 +1,14 @@
+---
+const id = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const enabled = /^G-[A-Z0-9]+$/.test(id || '') && (import.meta.env.PROD || import.meta.env.PUBLIC_ENABLE_ANALYTICS_IN_DEV === 'true');
+---
+{enabled && <script is:inline define:vars={{ id }}>
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', id, { send_page_view: true, allow_google_signals: false, allow_ad_personalization_signals: false });
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
+  document.head.appendChild(script);
+</script>}

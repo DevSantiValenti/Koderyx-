@@ -1,0 +1,10 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/koderyx-logo.png';
+interface Props { footer?: boolean; }
+const { footer = false } = Astro.props;
+---
+<a class:list={['brand', { 'brand-footer': footer }]} href="/" title="Ir al inicio">
+  <Image src={logo} alt="" width={64} height={64} format="webp" quality={85} loading="eager" />
+  <span class="brand-type">KODERYX<span>SOFTWARE SOLUTIONS</span></span>
+</a>

@@ -1,0 +1,63 @@
+---
+import Icon from './Icon.astro';
+---
+<form class="contact-form" name="contact" method="POST" action="/gracias" data-netlify="true" netlify-honeypot="bot-field" data-contact-form>
+  <input type="hidden" name="form-name" value="contact" />
+  <p hidden><label>No completar este campo <input name="bot-field" autocomplete="off" tabindex="-1" /></label></p>
+  <div class="form-grid">
+    <div class="field"><label for="name">Nombre <span>*</span></label><input id="name" name="name" autocomplete="name" placeholder="Tu nombre" minlength="2" maxlength="120" required /></div>
+    <div class="field"><label for="company">Empresa / negocio</label><input id="company" name="company" autocomplete="organization" placeholder="Nombre de tu negocio" maxlength="160" /></div>
+    <div class="field"><label for="email">Email <span>*</span></label><input id="email" name="email" type="email" autocomplete="email" placeholder="vos@ejemplo.com" maxlength="180" required /></div>
+    <div class="field"><label for="phone">WhatsApp</label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="Código de país + número" maxlength="30" pattern="[+0-9 \(\)\-]{7,30}" title="Ingresá entre 7 y 30 caracteres: números, espacios, paréntesis, + o guiones." /></div>
+    <div class="field"><label for="project-type">Tipo de proyecto <span>*</span></label><select id="project-type" name="project-type" required><option value="" disabled selected>Seleccioná una opción</option>{['Página web', 'Ecommerce', 'Sistema a medida', 'Integración', 'Otro'].map(type => <option value={type}>{type}</option>)}</select></div>
+    <div class="field"><label for="budget">Presupuesto estimado <small>(opcional)</small></label><input id="budget" name="budget" placeholder="Monto y moneda, si lo tenés definido" maxlength="120" /></div>
+    <div class="field field-full"><label for="message">Contanos sobre tu proyecto <span>*</span></label><textarea id="message" name="message" rows="4" placeholder="¿Qué necesitás resolver? ¿Tenés alguna idea en mente?" minlength="20" maxlength="5000" required></textarea><small>Mínimo 20 caracteres. No incluyas contraseñas ni datos sensibles.</small></div>
+  </div>
+  <div class="form-bottom"><p>Al enviar, aceptás que te contactemos por tu consulta. <a href="/privacidad">Política de privacidad.</a></p><button type="submit" class="button">Solicitar presupuesto <Icon name="diagonal" size={18} /></button></div>
+  <p class="form-status" data-form-status role="status" aria-live="polite" tabindex="-1" hidden></p>
+</form>
+<script>
+  import { trackEvent } from '../scripts/analytics';
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  const status = form?.querySelector<HTMLElement>('[data-form-status]');
+  const submit = form?.querySelector<HTMLButtonElement>('[type="submit"]');
+  const select = form?.querySelector<HTMLSelectElement>('#project-type');
+  const requestedType = new URLSearchParams(window.location.search).get('tipo');
+  if (select && requestedType && [...select.options].some(option => option.value === requestedType)) select.value = requestedType;
+  form?.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('[minlength]').forEach(field => {
+    const validate = () => field.setCustomValidity(field.value && field.value.trim().length < field.minLength ? `Ingresá al menos ${field.minLength} caracteres, sin contar espacios al principio o al final.` : '');
+    field.addEventListener('input', validate);
+    field.addEventListener('change', validate);
+  });
+  form?.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (!form.reportValidity() || !status || !submit || submit.disabled) return;
+    status.hidden = true;
+    if (['localhost', '127.0.0.1', '::1', '[::1]'].includes(window.location.hostname)) {
+      status.textContent = 'Estás en una vista previa local. El envío se habilita al publicar en Netlify con Forms activado. No se envió tu consulta.';
+      status.hidden = false;
+      status.focus();
+      return;
+    }
+    const original = submit.innerHTML;
+    submit.disabled = true;
+    submit.textContent = 'Enviando consulta…';
+    form.setAttribute('aria-busy', 'true');
+    const body = new URLSearchParams();
+    new FormData(form).forEach((value, key) => { if (typeof value === 'string') body.append(key, value.trim()); });
+    try {
+      const response = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString(), signal: AbortSignal.timeout(20000) });
+      if (!response.ok) throw new Error('No se pudo enviar la consulta');
+      trackEvent('form_submit', { form_name: 'contact', project_type: select?.value || 'Otro' });
+      window.location.assign('/gracias');
+    } catch {
+      status.textContent = 'No pudimos confirmar el envío. Tus datos siguen en el formulario: intentá nuevamente o escribinos por WhatsApp.';
+      status.hidden = false;
+      status.focus();
+    } finally {
+      submit.disabled = false;
+      submit.innerHTML = original;
+      form.removeAttribute('aria-busy');
+    }
+  });
+</script>

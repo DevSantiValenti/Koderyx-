@@ -1,0 +1,5 @@
+---
+import { whatsappUrl } from '../config/site';
+import Icon from './Icon.astro';
+---
+{whatsappUrl && <a class="whatsapp-float" href={whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label="Contactar a Koderyx por WhatsApp (abre en otra pestaña)" data-event="click_whatsapp"><Icon name="whatsapp" size={25} /><span class="whatsapp-tooltip">Hablemos de tu proyecto</span></a>}

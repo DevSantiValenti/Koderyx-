@@ -1,0 +1,22 @@
+---
+import { Image } from 'astro:assets';
+import logo from '../assets/koderyx-logo.png';
+import Icon from '../components/Icon.astro';
+---
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="status-dot"></span> TECNOLOGÍA CON PROPÓSITO</div>
+      <h1 id="hero-title">Software pensado para <span>hacer crecer</span> tu negocio.</h1>
+      <p>Desarrollamos páginas web, ecommerce y sistemas a medida. Transformamos tus desafíos en soluciones digitales listas para el mundo real.</p>
+      <div class="button-row"><a class="button" href="/contacto" data-event="click_presupuesto">Solicitar presupuesto <Icon name="diagonal" size={18} /></a><a class="button button-outline" href="#proyectos">Ver proyectos <Icon name="arrow" size={18} /></a></div>
+      <div class="hero-note"><span class="mini-line"></span> Tu idea. Nuestro código. Una solución real.</div>
+    </div>
+    <div class="hero-art">
+      <div class="art-label"><span>ESTUDIO DE SOFTWARE</span><span>ARGENTINA ↗</span></div>
+      <div class="logo-stage"><Image src={logo} alt="Logo oficial de KODERYX, con símbolo K y nombre en verde lima y blanco" widths={[360, 520, 700]} sizes="(max-width: 699px) 88vw, (max-width: 999px) 60vw, 42vw" width={520} height={520} format="webp" quality={87} loading="eager" fetchpriority="high" /></div>
+      <div class="art-caption"><span class="code-mark">&lt;/&gt;</span><div>DE LA IDEA A PRODUCCIÓN<small>Diseñamos. Construimos. Conectamos.</small></div><span class="art-cross">+</span></div>
+    </div>
+  </div>
+  <div class="container hero-strip"><span><Icon name="check" size={16} />Desarrollo a medida</span><span><Icon name="check" size={16} />Diseño responsive</span><span><Icon name="check" size={16} />De la idea a producción</span><span><Icon name="check" size={16} />Soporte directo</span></div>
+</section>

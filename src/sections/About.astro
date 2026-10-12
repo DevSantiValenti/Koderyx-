@@ -1,0 +1,11 @@
+---
+import { advantages } from '../data/content';
+import { site } from '../config/site';
+import Icon from '../components/Icon.astro';
+---
+<section class="section why-section" aria-labelledby="why-title">
+  <div class="container why-layout"><div><div class="eyebrow"><span class="section-index">04 /</span> POR QUÉ KODERYX</div><h2 id="why-title">Buen software.<br />Una forma clara<br />de trabajar<span class="lime">.</span></h2><p class="section-intro">No se trata solo de escribir código. Se trata de entender tu negocio y construir algo que te sirva.</p><a class="text-link" href="/contacto" data-event="click_presupuesto">Conversemos sobre tu idea <Icon name="diagonal" size={18} /></a></div><div class="advantages-grid">{advantages.map(item => <article><Icon name={item.icon} size={24} /><h3>{item.title}</h3><p>{item.description}</p></article>)}</div></div>
+</section>
+<section id="nosotros" class="section about-section" aria-labelledby="about-title">
+  <div class="container about-layout"><div><div class="eyebrow"><span class="section-index">05 /</span> SOBRE KODERYX</div><h2 id="about-title">Tecnología con<br />los pies en la tierra<span class="lime">.</span></h2></div><div class="about-copy"><p>Koderyx nace con el objetivo de transformar necesidades reales de negocios en soluciones digitales claras, escalables y preparadas para producción.</p><p>Diseñamos páginas web profesionales, tiendas online y sistemas para empresas. Escuchamos, definimos prioridades y acompañamos el recorrido desde la primera conversación hasta la implementación.</p><div class="founder"><span class="founder-monogram" aria-hidden="true">SV<span>↗</span></span><div><span class="founder-label">FUNDADOR</span><h3>Santiago Valenti</h3><p>Full Stack Developer</p></div><a href={site.portfolio} target="_blank" rel="noopener noreferrer" class="founder-link" data-event="click_portfolio" aria-label="Conocer al fundador (abre en otra pestaña)">Conocer al fundador <Icon name="diagonal" size={17} /></a></div></div></div>
+</section>
