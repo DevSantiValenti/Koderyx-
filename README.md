@@ -56,7 +56,7 @@ Los datos públicos se centralizan en `src/config/site.ts`. Las variables permit
 | `PUBLIC_WHATSAPP_NUMBER` | Número internacional, solo dígitos | Número proporcionado por el titular |
 | `PUBLIC_INSTAGRAM_URL` | URL completa del perfil | `https://www.instagram.com/koderyx/` |
 | `PUBLIC_CONTACT_EMAIL` | Email comercial; al configurarlo aparece en contacto/footer | Vacío |
-| `PUBLIC_GA_MEASUREMENT_ID` | ID real de GA4, formato `G-...` | Vacío: GA no carga |
+| `PUBLIC_GA_MEASUREMENT_ID` | ID real de GA4, formato `G-...` | `G-Z1E9CFNPXY` |
 | `PUBLIC_ENABLE_ANALYTICS_IN_DEV` | Habilitación explícita de GA durante desarrollo | `false` |
 
 El mensaje predeterminado de WhatsApp se codifica con `encodeURIComponent` desde el mismo archivo. El número se conserva como fue entregado; comprobar que la cuenta de WhatsApp lo reconoce antes del lanzamiento.
@@ -109,7 +109,7 @@ Si se añaden campos, conservar los mismos nombres en el formulario y en cualqui
 3. En Netlify **Environment variables**, agregar `PUBLIC_GA_MEASUREMENT_ID` con ese ID y scope **Builds** en producción.
 4. Volver a desplegar. Comprobar las solicitudes de GA y los eventos en la propiedad.
 
-`GoogleAnalytics.astro` no emite el script si falta un ID válido. En desarrollo tampoco lo emite salvo `PUBLIC_ENABLE_ANALYTICS_IN_DEV=true`. Manrope se sirve localmente: no hay solicitudes a Google Fonts. La analítica es la única integración de medición prevista.
+`GoogleAnalytics.astro` inserta el tag global en el layout compartido, por lo que se incluye en todas las páginas y vistas estáticas. Usa `G-Z1E9CFNPXY` por defecto y permite reemplazarlo con `PUBLIC_GA_MEASUREMENT_ID`. En desarrollo tampoco lo emite salvo `PUBLIC_ENABLE_ANALYTICS_IN_DEV=true`. Manrope se sirve localmente: no hay solicitudes a Google Fonts. La analítica es la única integración de medición prevista.
 
 El helper `src/scripts/analytics.ts` funciona sin GA y evita que un error de analítica bloquee acciones del sitio.
 

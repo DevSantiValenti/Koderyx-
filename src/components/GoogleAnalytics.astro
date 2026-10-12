@@ -1,5 +1,7 @@
 ---
-const id = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+// ID supplied by the site owner. It can still be overridden in Netlify
+// with PUBLIC_GA_MEASUREMENT_ID if the property changes in the future.
+const id = import.meta.env.PUBLIC_GA_MEASUREMENT_ID || 'G-Z1E9CFNPXY';
 const enabled = /^G-[A-Z0-9]+$/.test(id || '') && (import.meta.env.PROD || import.meta.env.PUBLIC_ENABLE_ANALYTICS_IN_DEV === 'true');
 ---
 {enabled && <script is:inline define:vars={{ id }}>
