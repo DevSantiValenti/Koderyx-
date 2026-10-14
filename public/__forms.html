@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Definición del formulario de contacto</title>
+  </head>
+  <body>
+    <!-- Netlify lee esta definición estática durante el despliegue. -->
+    <form name="contact" method="POST" action="/gracias" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="contact" />
+      <input name="bot-field" />
+      <input name="name" />
+      <input name="company" />
+      <input type="email" name="email" />
+      <input name="phone" />
+      <select name="project-type"><option value="">Tipo de proyecto</option></select>
+      <input name="budget" />
+      <textarea name="message"></textarea>
+    </form>
+  </body>
+</html>

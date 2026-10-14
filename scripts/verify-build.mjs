@@ -17,6 +17,7 @@ const descriptions = new Set();
 const problems = [];
 const check = (condition, message) => { if (!condition) problems.push(message); };
 for (const file of htmlFiles) {
+  if (file === join(root, '__forms.html')) continue;
   const html = await readFile(file, 'utf8');
   const path = file.slice(root.length).replace(/\/index\.html$/, '') || '/';
   pages.set(path, html);
@@ -55,6 +56,10 @@ for (const [path, html] of pages) {
   }
 }
 const expectedFields = ['form-name', 'bot-field', 'name', 'company', 'email', 'phone', 'project-type', 'budget', 'message'];
+const formDefinition = await readFile(join(root, '__forms.html'), 'utf8');
+check(formDefinition.includes('<form name="contact"') && formDefinition.includes('data-netlify="true"'), 'Definición estática de Netlify Forms ausente');
+check(formDefinition.includes('netlify-honeypot="bot-field"'), 'Definición estática sin honeypot');
+for (const name of expectedFields) check(formDefinition.includes(`name="${name}"`), `Definición estática sin campo ${name}`);
 for (const path of ['/', '/contacto']) {
   const html = pages.get(path);
   check(html.includes('data-netlify="true"'), `${path}: Netlify Forms no detectado`);

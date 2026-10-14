@@ -11,13 +11,14 @@ const browser = await chromium.launch({ ...(process.env.BROWSER_PATH ? { executa
 const errors = [], checks = [], violations = [];
 const routes = ['/', '/servicios', '/proyectos', '/proyectos/sonrie-plus', '/proyectos/electrodental-nea', '/proyectos/gimnasios', '/proyectos/turnero-facil', '/contacto', '/privacidad', '/gracias', '/404.html'];
 const mime = { '.html': 'text/html', '.css': 'text/css', '.js': 'application/javascript', '.webp': 'image/webp', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.xml': 'application/xml', '.txt': 'text/plain' };
-const posts = [];
+const posts = [], postPaths = [];
 let failPost = false;
 const context = await browser.newContext({ reducedMotion: 'reduce' });
 await context.route(`${base}/**`, async route => {
   const request = route.request();
   if (request.method() === 'POST') {
     posts.push(new URLSearchParams(request.postData()));
+    postPaths.push(new URL(request.url()).pathname);
     return route.fulfill({ status: failPost ? 503 : 200, contentType: 'text/html', body: 'Mock Netlify response; no external submission.' });
   }
   const path = decodeURIComponent(new URL(request.url()).pathname);
@@ -131,6 +132,7 @@ try {
   await page.locator('button[type="submit"]').click();
   await page.waitForURL(base + '/gracias');
   assert.equal(posts.at(-1).get('form-name'), 'contact');
+  assert.equal(postPaths.at(-1), '/__forms.html');
   assert.equal(posts.at(-1).get('bot-field'), '');
   assert.equal(posts.at(-1).get('project-type'), 'Ecommerce');
   assert((await page.evaluate(() => window.__events)).some(event => event[1] === 'form_submit'));

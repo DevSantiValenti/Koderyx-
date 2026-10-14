@@ -88,19 +88,21 @@ Referencia: [configuración de DNS externo de Netlify](https://docs.netlify.com/
 
 ## Netlify Forms
 
-El formulario `contact` se renderiza directamente en el HTML estático de inicio y contacto, con los mismos campos en ambas páginas. Lleva `method="POST"`, `action="/gracias"`, `data-netlify="true"`, `form-name=contact` y el honeypot `bot-field`. No necesita una copia oculta de detección: el formulario completo ya existe en la salida estática.
+El formulario `contact` se renderiza en el HTML estático de inicio y contacto, con los mismos campos en ambas páginas. `public/__forms.html` contiene una definición estática adicional para que Netlify registre todos los campos durante el despliegue. Los tres formularios comparten el nombre `contact`, el campo oculto `form-name=contact` y el honeypot `bot-field`.
 
 Campos: `name`, `company`, `email`, `phone`, `project-type`, `budget`, `message`, además de los campos técnicos `form-name` y `bot-field`.
 
-- Con JavaScript, valida los campos, envía un POST URL-encoded a `/`, comprueba `response.ok` y navega a `/gracias` únicamente tras una respuesta exitosa.
+- Con JavaScript, valida los campos, envía un POST URL-encoded a `/__forms.html`, comprueba `response.ok` y navega a `/gracias` únicamente tras una respuesta exitosa.
 - Si falla, conserva los datos, vuelve a habilitar el botón y muestra un mensaje accesible. Una espera máxima de 20 segundos evita bloquear indefinidamente el formulario.
 - Sin JavaScript funciona el POST HTML nativo a `/gracias` en Netlify.
 - En `localhost`, no se simula una recepción real: aparece un aviso y no se envían datos. Astro dev/preview no procesa Netlify Forms.
 - No se envían valores personales del formulario a GA4.
 
-Después de publicar, configurar las notificaciones en **Forms → Submission notifications**. Hacer una consulta de prueba identificada, con un email real y un mensaje completo. Verificar su llegada en **Verified submissions** o en **Spam**, además de la navegación a `/gracias`. Esta comprobación real depende del despliegue; las pruebas locales simulan las respuestas HTTP y no envían mensajes a terceros.
+Después de publicar, comprobar que **Forms → Active forms** muestra `contact`. Si la detección se activó después del último despliegue, es necesario volver a desplegar: la notificación por email no registra por sí sola el formulario. Hacer una consulta de prueba identificada, con un email real y un mensaje completo. Verificar su llegada en **Verified submissions** o en **Spam**, además de la navegación a `/gracias`. Esta comprobación real depende del despliegue; las pruebas locales simulan las respuestas HTTP y no envían mensajes a terceros.
 
 Si se añaden campos, conservar los mismos nombres en el formulario y en cualquier integración. Volver a desplegar para que Netlify detecte la nueva definición. Ver [configuración de Forms](https://docs.netlify.com/manage/forms/setup/) y [filtro honeypot](https://docs.netlify.com/manage/forms/spam-filters/).
+
+El email público por defecto es `contacto@koderyx.com.ar` y se enlaza desde la sección de contacto y el pie de página mediante `mailto:`. Se puede sustituir con `PUBLIC_CONTACT_EMAIL` en tiempo de compilación. El reenvío de ImprovMX funciona de forma independiente a Netlify Forms.
 
 ## Google Analytics 4
 

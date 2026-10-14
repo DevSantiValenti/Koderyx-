@@ -46,12 +46,12 @@ import Icon from './Icon.astro';
     const body = new URLSearchParams();
     new FormData(form).forEach((value, key) => { if (typeof value === 'string') body.append(key, value.trim()); });
     try {
-      const response = await fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString(), signal: AbortSignal.timeout(20000) });
+      const response = await fetch('/__forms.html', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString(), signal: AbortSignal.timeout(20000) });
       if (!response.ok) throw new Error('No se pudo enviar la consulta');
       trackEvent('form_submit', { form_name: 'contact', project_type: select?.value || 'Otro' });
       window.location.assign('/gracias');
     } catch {
-      status.textContent = 'No pudimos confirmar el envío. Tus datos siguen en el formulario: intentá nuevamente o escribinos por WhatsApp.';
+      status.textContent = 'No pudimos confirmar el envío. Tus datos siguen en el formulario: intentá nuevamente, escribinos a contacto@koderyx.com.ar o por WhatsApp.';
       status.hidden = false;
       status.focus();
     } finally {

@@ -1,6 +1,6 @@
 const whatsapp = (import.meta.env.PUBLIC_WHATSAPP_NUMBER || '543624701036').replace(/\D/g, '');
 const instagram = import.meta.env.PUBLIC_INSTAGRAM_URL || 'https://www.instagram.com/koderyx/';
-const email = import.meta.env.PUBLIC_CONTACT_EMAIL || '';
+const email = import.meta.env.PUBLIC_CONTACT_EMAIL || 'contacto@koderyx.com.ar';
 
 export const site = {
   name: 'KODERYX',
