@@ -39,7 +39,7 @@ src/
   styles/          Estilos responsive, foco visible y movimiento reducido
 public/
   images/          Logos originales/optimizados, Open Graph y capturas reales
-  favicon/         Iconos derivados del logo completo, sin recortarlo
+  favicon/         Rutas anteriores del favicon, actualizadas con el isotipo K
   robots.txt
 scripts/           Verificaciones y preparación de recursos
 netlify.toml       Build, redirecciones, caché y cabeceras
@@ -137,6 +137,8 @@ Si GA4 tiene activada la medición automática de interacciones con formularios,
 Ver [propiedades de dominio](https://support.google.com/webmasters/answer/34592?hl=es), [verificación](https://support.google.com/webmasters/answer/9008080?hl=es) y [envío de sitemaps](https://support.google.com/webmasters/answer/7451001?hl=es).
 
 `astro.config.mjs` define el dominio de producción y `@astrojs/sitemap`. `Layout.astro` emite `lang="es-AR"`, title y descripción por página, canonical sin query, Open Graph, Twitter cards, favicon y JSON-LD Organization/WebSite. Inicio y servicios incluyen Service; las fichas incluyen CreativeWork.
+
+El favicon oficial se extrae del isotipo circular “K”, sin el texto del logo. `node scripts/prepare-assets.mjs` genera `/favicon.ico`, `/favicon-48x48.png`, `/favicon-96x96.png` y `/apple-touch-icon.png` en `public/`; el layout compartido referencia esas rutas estables. `robots.txt` no las bloquea. Después del despliegue, comprobar las URLs públicas y solicitar una nueva inspección de la página principal en Search Console para que Google vuelva a rastrear el icono.
 
 `robots.txt` permite rastreo y referencia el sitemap. Las ocho páginas de contenido son indexables y están enlazadas internamente. `/gracias` y `/404.html` tienen **noindex intencional** y no aparecen en el sitemap.
 

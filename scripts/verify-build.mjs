@@ -67,8 +67,25 @@ for (const path of ['/', '/contacto']) {
   check(html.includes('action="/gracias"'), `${path}: acción incorrecta`);
   for (const name of expectedFields) check(html.includes(`name="${name}"`), `${path}: falta campo ${name}`);
 }
+const faviconLinks = [
+  '<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png">',
+  '<link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png">',
+  '<link rel="icon" href="/favicon.ico">',
+  '<link rel="apple-touch-icon" href="/apple-touch-icon.png">',
+];
+for (const [path, html] of pages) {
+  for (const link of faviconLinks) check(html.includes(link), `${path}: falta referencia de favicon ${link}`);
+}
+const pngSignature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
+for (const [name, size] of [['favicon-48x48.png', 48], ['favicon-96x96.png', 96], ['apple-touch-icon.png', 180]]) {
+  const bytes = await readFile(join(root, name));
+  check(bytes.subarray(0, 8).equals(pngSignature) && bytes.readUInt32BE(16) === size && bytes.readUInt32BE(20) === size, `${name}: PNG cuadrado inválido`);
+}
+const ico = await readFile(join(root, 'favicon.ico'));
+check(ico.readUInt16LE(2) === 1 && ico.readUInt16LE(4) >= 3, 'favicon.ico inválido');
 const robots = await readFile(join(root, 'robots.txt'), 'utf8');
 check(robots.includes('Allow: /') && robots.includes(`${domain}/sitemap-index.xml`), 'robots.txt incorrecto');
+check(!/Disallow:\s*\/(?:favicon|apple-touch-icon)/i.test(robots), 'robots.txt bloquea el favicon');
 const sitemap = await readFile(join(root, 'sitemap-0.xml'), 'utf8');
 for (const path of pages.keys()) if (!['/gracias', '/404.html'].includes(path)) check(sitemap.includes(`<loc>${domain}${path === '/' ? '/' : path}</loc>`), `sitemap: falta ${path}`);
 check(!sitemap.includes('/gracias') && !sitemap.includes('/404'), 'sitemap: páginas auxiliares incluidas');
