@@ -3,9 +3,10 @@ import Icon from './Icon.astro';
 import type { Project } from '../data/projects';
 interface Props { project: Project; large?: boolean; }
 const { project, large = false } = Astro.props;
+const visualImages = project.previews?.length ? project.previews : project.logos;
 ---
-<div class:list={['project-visual', `project-${project.slug}`, { 'project-visual-large': large, 'has-project-logos': !project.cover && project.logos.length > 0 }]}>
-  {project.cover ? <img src={project.cover.src} alt={project.cover.alt} width={project.cover.width} height={project.cover.height} loading="lazy" decoding="async" /> : project.logos.length ? <div class:list={['project-logo-panel', { 'dual-logo': project.logos.length > 1 }]}>{project.logos.map(logo => <img src={logo.src} alt={logo.alt} width={logo.width} height={logo.height} loading="lazy" decoding="async" />)}<span class="project-logo-caption">{project.category}</span></div> : <div class="capture-placeholder" role="img" aria-label={`Espacio reservado para una captura real de ${project.name}`}>
+<div class:list={['project-visual', `project-${project.slug}`, { 'project-visual-large': large, 'has-project-images': !project.cover && visualImages.length > 0 }]}>
+  {project.cover ? <img src={project.cover.src} alt={project.cover.alt} width={project.cover.width} height={project.cover.height} loading="lazy" decoding="async" /> : visualImages.length ? <div class:list={['project-image-panel', { 'dual-image': visualImages.length > 1 }]}>{visualImages.map(image => <img src={image.src} alt={image.alt} width={image.width} height={image.height} loading="lazy" decoding="async" />)}<span class="project-image-caption">{project.category}</span></div> : <div class="capture-placeholder" role="img" aria-label={`Espacio reservado para una captura real de ${project.name}`}>
     <div class="capture-top"><span><i></i><i></i><i></i></span><span>{project.category}</span><Icon name="diagonal" size={13} /></div>
     <div class="capture-center"><span class="capture-icon"><Icon name="image" size={28} /></span><strong>{project.shortName}</strong><span>Capturas del proyecto próximamente</span></div>
     <div class="capture-bottom"><span>ESPACIO PARA CAPTURA REAL</span><span>↗</span></div>

@@ -9,7 +9,7 @@ const root = resolve('dist');
 const base = 'https://koderyx.test';
 const browser = await chromium.launch({ ...(process.env.BROWSER_PATH ? { executablePath: process.env.BROWSER_PATH } : {}), headless: true, args: ['--no-sandbox'] });
 const errors = [], checks = [], violations = [];
-const routes = ['/', '/servicios', '/proyectos', '/proyectos/sonrie-plus', '/proyectos/electrodental-nea', '/proyectos/gimnasios', '/contacto', '/privacidad', '/gracias', '/404.html'];
+const routes = ['/', '/servicios', '/proyectos', '/proyectos/sonrie-plus', '/proyectos/electrodental-nea', '/proyectos/gimnasios', '/proyectos/turnero-facil', '/contacto', '/privacidad', '/gracias', '/404.html'];
 const mime = { '.html': 'text/html', '.css': 'text/css', '.js': 'application/javascript', '.webp': 'image/webp', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.xml': 'application/xml', '.txt': 'text/plain' };
 const posts = [];
 let failPost = false;
@@ -28,7 +28,12 @@ await context.route(`${base}/**`, async route => {
 });
 await context.addInitScript(() => {
   window.__events = JSON.parse(sessionStorage.getItem('qa-events') || '[]');
-  window.gtag = (...args) => { window.__events.push(args); sessionStorage.setItem('qa-events', JSON.stringify(window.__events)); };
+  let gtagImpl = () => {};
+  Object.defineProperty(window, 'gtag', {
+    configurable: true,
+    get: () => gtagImpl,
+    set: fn => { gtagImpl = (...args) => { window.__events.push(args); sessionStorage.setItem('qa-events', JSON.stringify(window.__events)); fn(...args); }; },
+  });
   // Verify click events without opening WhatsApp, Instagram or the founder's site.
   document.addEventListener('click', event => {
     const link = event.target instanceof Element ? event.target.closest('a[target="_blank"]') : null;
@@ -53,7 +58,19 @@ try {
       });
       assert.equal(overflowing.length, 0, `Overflow ${width}px ${path}: ${overflowing.join(', ')}`);
       checks.push({ width, path, overflow: false });
-      if ([390, 1440].includes(width) && ['/', '/contacto', '/proyectos/sonrie-plus', '/proyectos/electrodental-nea', '/proyectos/gimnasios', '/servicios', '/privacidad'].includes(path)) {
+      if (width === 1440 && path === '/') {
+        const cards = await page.locator('#proyectos .project-card').evaluateAll(elements => elements.map(element => ({ top: element.getBoundingClientRect().top, slug: element.querySelector('.project-image-link')?.getAttribute('href') })));
+        assert.equal(cards.length, 4, 'La grilla debe mostrar cuatro proyectos');
+        assert(cards.slice(0, 3).every(card => card.top === cards[0].top), 'Los primeros tres proyectos deben compartir fila');
+        assert.equal(cards[3].slug, '/proyectos/turnero-facil');
+        assert(cards[3].top > cards[0].top, 'Turnero Fácil debe iniciar la segunda fila');
+        await page.locator('#proyectos .project-turnero-facil').scrollIntoViewIfNeeded();
+        await page.waitForFunction(() => {
+          const images = [...document.querySelectorAll('#proyectos .project-turnero-facil img')];
+          return images.length === 2 && images.every(image => image.complete && image.naturalWidth > 0);
+        });
+      }
+      if ([390, 1440].includes(width) && ['/', '/contacto', '/proyectos/sonrie-plus', '/proyectos/electrodental-nea', '/proyectos/gimnasios', '/proyectos/turnero-facil', '/servicios', '/privacidad'].includes(path)) {
         const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
         violations.push(...result.violations.map(item => ({ width, path, id: item.id, impact: item.impact, nodes: item.nodes.map(node => ({ target: node.target, summary: node.failureSummary })) })));
       }

@@ -45,7 +45,7 @@ scripts/           Verificaciones y preparación de recursos
 netlify.toml       Build, redirecciones, caché y cabeceras
 ```
 
-Rutas: `/`, `/servicios`, `/proyectos`, `/proyectos/sonrie-plus`, `/proyectos/electrodental-nea`, `/proyectos/gimnasios`, `/contacto`, `/privacidad`, `/gracias` y una página `404.html`.
+Rutas: `/`, `/servicios`, `/proyectos`, `/proyectos/sonrie-plus`, `/proyectos/electrodental-nea`, `/proyectos/gimnasios`, `/proyectos/turnero-facil`, `/contacto`, `/privacidad`, `/gracias` y una página `404.html`.
 
 ## Configuración central y variables
 

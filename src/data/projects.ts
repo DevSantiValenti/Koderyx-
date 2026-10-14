@@ -13,6 +13,7 @@ export interface Project {
   cover: { src: string; alt: string; width: number; height: number } | null;
   screenshots: { src: string; alt: string; width: number; height: number }[];
   logos: { src: string; alt: string; width: number; height: number }[];
+  previews?: { src: string; alt: string; width: number; height: number }[];
   url?: string;
 }
 
@@ -58,6 +59,26 @@ export const projects: Project[] = [
     logos: [
       { src: '/images/projects/halcon-logo.webp', alt: 'Logo oficial de HALCÓN GYM', width: 500, height: 500 },
       { src: '/images/projects/clubfit-logo.webp', alt: 'Logo oficial de ClubFit House', width: 500, height: 500 },
+    ],
+  },
+  {
+    slug: 'turnero-facil', name: 'TURNERO FÁCIL', shortName: 'TURNERO FÁCIL',
+    sector: 'Salud · Odontología', category: 'Sistema de gestión de turnos',
+    description: 'Una agenda digital para clínicas odontológicas que reúne turnos, pacientes, profesionales y pagos en un solo lugar.',
+    problem: 'Las agendas manuales y los sistemas desconectados dificultaban consultar la disponibilidad real, seguir el historial de pacientes y evitar turnos superpuestos.',
+    solution: 'Un sistema privado con agendas por profesional, disponibilidad configurable, fichas de pacientes y registro de ingresos. Su integración con SONRÍE+ mantiene sincronizados los turnos gestionados desde ambos canales.',
+    features: ['Agenda diaria y semanal', 'Gestión de pacientes y profesionales', 'Confirmación, anulación y liberación de turnos', 'Control de presentismo y pagos', 'Sincronización de turnos con SONRÍE+'],
+    technologies: ['Java 21', 'Spring Boot', 'Spring Security', 'MySQL', 'Thymeleaf', 'JavaScript'],
+    result: 'Un sistema funcional para la operación diaria de clínicas odontológicas, con acceso privado y una agenda centralizada.',
+    cover: null,
+    screenshots: [
+      { src: '/images/projects/turnero-facil-agenda-uno.png', alt: 'Pantalla de acceso de Turnero Fácil para UNO Odontología Integral.', width: 1900, height: 862 },
+      { src: '/images/projects/turnero-facil-sonriete.png', alt: 'Pantalla de acceso de Turnero Fácil para Sonríete Odontología.', width: 1477, height: 665 },
+    ],
+    logos: [],
+    previews: [
+      { src: '/images/projects/turnero-facil-agenda-uno.png', alt: 'Vista de Turnero Fácil para UNO Odontología Integral.', width: 1900, height: 862 },
+      { src: '/images/projects/turnero-facil-sonriete.png', alt: 'Vista de Turnero Fácil para Sonríete Odontología.', width: 1477, height: 665 },
     ],
   },
 ];
