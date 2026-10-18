@@ -45,7 +45,7 @@ scripts/           Verificaciones y preparación de recursos
 netlify.toml       Build, redirecciones, caché y cabeceras
 ```
 
-Rutas: `/`, `/servicios`, `/proyectos`, `/proyectos/sonrie-plus`, `/proyectos/electrodental-nea`, `/proyectos/gimnasios`, `/proyectos/turnero-facil`, `/contacto`, `/privacidad`, `/gracias` y una página `404.html`.
+Rutas: `/`, `/servicios`, `/proyectos`, `/proyectos/sonrie-plus`, `/proyectos/electrodental-nea`, `/proyectos/gimnasios`, `/proyectos/turnero-facil`, `/proyectos/escarlata-nails`, `/contacto`, `/privacidad`, `/gracias` y una página `404.html`.
 
 ## Configuración central y variables
 
@@ -140,7 +140,7 @@ Ver [propiedades de dominio](https://support.google.com/webmasters/answer/34592?
 
 El favicon oficial se extrae del isotipo circular “K”, sin el texto del logo. `node scripts/prepare-assets.mjs` genera `/favicon.ico`, `/favicon-48x48.png`, `/favicon-96x96.png` y `/apple-touch-icon.png` en `public/`; el layout compartido referencia esas rutas estables. `robots.txt` no las bloquea. Después del despliegue, comprobar las URLs públicas y solicitar una nueva inspección de la página principal en Search Console para que Google vuelva a rastrear el icono.
 
-`robots.txt` permite rastreo y referencia el sitemap. Las ocho páginas de contenido son indexables y están enlazadas internamente. `/gracias` y `/404.html` tienen **noindex intencional** y no aparecen en el sitemap.
+`robots.txt` permite rastreo y referencia el sitemap. Las diez páginas de contenido son indexables y están enlazadas internamente. `/gracias` y `/404.html` tienen **noindex intencional** y no aparecen en el sitemap.
 
 ## Agregar o editar proyectos
 

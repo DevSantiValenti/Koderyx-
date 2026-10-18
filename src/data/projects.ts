@@ -81,4 +81,18 @@ export const projects: Project[] = [
       { src: '/images/projects/turnero-facil-sonriete.png', alt: 'Vista de Turnero Fácil para Sonríete Odontología.', width: 1477, height: 665 },
     ],
   },
+  {
+    slug: 'escarlata-nails', name: 'ESCARLATA BEAUTY NAILS', shortName: 'ESCARLATA',
+    sector: 'Belleza · Manicura', category: 'Landing page',
+    description: 'Una landing para presentar los servicios y trabajos de Escarlata Beauty Nails y facilitar las consultas y reservas por WhatsApp.',
+    problem: 'Mostrar los servicios de manicura y ejemplos de trabajos en una página clara, con una forma directa de consultar y reservar un turno.',
+    solution: 'Una landing responsive que reúne la presentación del salón, los servicios, una galería de trabajos, preguntas frecuentes y accesos a WhatsApp e Instagram.',
+    features: ['Presentación de servicios de manicura', 'Galería de trabajos', 'Preguntas frecuentes', 'Enlaces para consultar y reservar por WhatsApp', 'Acceso al perfil de Instagram'],
+    technologies: ['HTML', 'CSS', 'JavaScript'],
+    result: 'Una presencia web donde las visitantes pueden conocer los servicios, ver trabajos reales y contactar al salón para reservar.',
+    cover: null,
+    screenshots: [{ src: '/images/projects/escarlata-nails-screen.webp', alt: 'Inicio de Escarlata Beauty Nails: presentación de manicura en Resistencia y botón para reservar por WhatsApp.', width: 1440, height: 960 }],
+    logos: [{ src: '/images/projects/escarlata-logo.webp', alt: 'Logo oficial de Escarlata, el mismo que usa su perfil de Instagram.', width: 150, height: 150 }],
+    url: 'https://escarlatanails.netlify.app/',
+  },
 ];

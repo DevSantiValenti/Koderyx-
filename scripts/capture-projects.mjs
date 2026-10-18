@@ -7,10 +7,13 @@ const browser = await chromium.launch({ ...(process.env.BROWSER_PATH ? { executa
 const sources = [
   { slug: 'sonrie-plus', url: 'https://riemas.com.ar/' },
   { slug: 'electrodental-nea', url: 'https://electrodentalnea.com.ar/' },
+  { slug: 'escarlata-nails', url: 'https://escarlatanails.netlify.app/' },
 ];
+const selectedSources = process.argv[2] ? sources.filter(source => source.slug === process.argv[2]) : sources;
+if (!selectedSources.length) throw new Error(`Proyecto desconocido: ${process.argv[2]}`);
 const results = [];
 try {
-  for (const source of sources) {
+  for (const source of selectedSources) {
     const page = await browser.newPage({ viewport: { width: 1440, height: 960 }, deviceScaleFactor: 1 });
     try {
       await page.goto(source.url, { waitUntil: 'networkidle', timeout: 45000 });

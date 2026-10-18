@@ -9,7 +9,7 @@ const root = resolve('dist');
 const base = 'https://koderyx.test';
 const browser = await chromium.launch({ ...(process.env.BROWSER_PATH ? { executablePath: process.env.BROWSER_PATH } : {}), headless: true, args: ['--no-sandbox'] });
 const errors = [], checks = [], violations = [];
-const routes = ['/', '/servicios', '/proyectos', '/proyectos/sonrie-plus', '/proyectos/electrodental-nea', '/proyectos/gimnasios', '/proyectos/turnero-facil', '/contacto', '/privacidad', '/gracias', '/404.html'];
+const routes = ['/', '/servicios', '/proyectos', '/proyectos/sonrie-plus', '/proyectos/electrodental-nea', '/proyectos/gimnasios', '/proyectos/turnero-facil', '/proyectos/escarlata-nails', '/contacto', '/privacidad', '/gracias', '/404.html'];
 const mime = { '.html': 'text/html', '.css': 'text/css', '.js': 'application/javascript', '.webp': 'image/webp', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.xml': 'application/xml', '.txt': 'text/plain' };
 const posts = [], postPaths = [];
 let failPost = false;
@@ -61,17 +61,19 @@ try {
       checks.push({ width, path, overflow: false });
       if (width === 1440 && path === '/') {
         const cards = await page.locator('#proyectos .project-card').evaluateAll(elements => elements.map(element => ({ top: element.getBoundingClientRect().top, slug: element.querySelector('.project-image-link')?.getAttribute('href') })));
-        assert.equal(cards.length, 4, 'La grilla debe mostrar cuatro proyectos');
+        assert.equal(cards.length, 5, 'La grilla debe mostrar cinco proyectos');
         assert(cards.slice(0, 3).every(card => card.top === cards[0].top), 'Los primeros tres proyectos deben compartir fila');
         assert.equal(cards[3].slug, '/proyectos/turnero-facil');
         assert(cards[3].top > cards[0].top, 'Turnero Fácil debe iniciar la segunda fila');
+        assert.equal(cards[4].slug, '/proyectos/escarlata-nails');
+        assert.equal(cards[4].top, cards[3].top, 'Escarlata Nails debe aparecer junto a Turnero Fácil en la segunda fila');
         await page.locator('#proyectos .project-turnero-facil').scrollIntoViewIfNeeded();
         await page.waitForFunction(() => {
           const images = [...document.querySelectorAll('#proyectos .project-turnero-facil img')];
           return images.length === 2 && images.every(image => image.complete && image.naturalWidth > 0);
         });
       }
-      if ([390, 1440].includes(width) && ['/', '/contacto', '/proyectos/sonrie-plus', '/proyectos/electrodental-nea', '/proyectos/gimnasios', '/proyectos/turnero-facil', '/servicios', '/privacidad'].includes(path)) {
+      if ([390, 1440].includes(width) && ['/', '/contacto', '/proyectos/sonrie-plus', '/proyectos/electrodental-nea', '/proyectos/gimnasios', '/proyectos/turnero-facil', '/proyectos/escarlata-nails', '/servicios', '/privacidad'].includes(path)) {
         const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
         violations.push(...result.violations.map(item => ({ width, path, id: item.id, impact: item.impact, nodes: item.nodes.map(node => ({ target: node.target, summary: node.failureSummary })) })));
       }
