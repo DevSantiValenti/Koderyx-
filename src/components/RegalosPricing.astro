@@ -1,0 +1,136 @@
+---
+import { giftExperiences } from '../data/gifts';
+import { giftPlans, giftExtras, giftSurprises, giftOffer, exclusiveDesignPrice, formatGiftPrice as money } from '../data/gift-pricing';
+import { site } from '../config/site';
+import '../styles/regalos-pricing.css';
+---
+<section class="catalog-section gift-pricing" id="kdx-regalos-planes" aria-labelledby="gift-plans-title">
+  <div class="catalog-wrap">
+    <div class="section-top">
+      <div><p class="eyebrow">Una historia. Tres formas de regalarla.</p><h2 id="gift-plans-title">Elegí cuánto<br />querés sorprender.</h2></div>
+      <p>Precios en pesos argentinos, por página y con pago único. Incluyen personalización de una plantilla y {giftOffer.months} meses de publicación.</p>
+    </div>
+    {giftOffer.active && <p class="gift-promo"><strong>Precios de lanzamiento</strong> para los primeros {giftOffer.places} clientes. Confirmamos disponibilidad del cupo por WhatsApp.</p>}
+    <div class="gift-plans">
+      {giftPlans.map((plan) => (
+        <article class:list={['gift-plan', { 'gift-plan-featured': plan.id === 'intermedio' }]}>
+          <span class="gift-badge">{plan.badge}</span>
+          <h3>{plan.name}</h3>
+          <p class="gift-plan-description">{plan.description}</p>
+          {giftOffer.active && <p class="gift-old-price">Precio normal <s>{money(plan.price)}</s></p>}
+          <p class="gift-price">{money(giftOffer.active ? plan.launchPrice : plan.price)} <span>ARS</span></p>
+          <p class="gift-price-caption">Pago único · {giftOffer.months} meses online</p>
+          <ul>{plan.features.map((feature) => <li>{feature}</li>)}</ul>
+          <a class="btn gift-button" href="#kdx-regalos-presupuesto" data-quote-plan={plan.id}>Elegir {plan.name}</a>
+        </article>
+      ))}
+    </div>
+    <p class="gift-note">Los planes adaptan una plantilla existente; no incluyen un diseño exclusivo desde cero. Las fotografías y rondas indicadas son el total de cada plan.</p>
+    <p class="gift-note">* La música debe contar con permiso o licencia de uso. El visitante deberá interactuar para reproducirla.</p>
+    <div class="gift-surprises">
+      <div class="section-top">
+        <div><p class="eyebrow">Incluido en Premium</p><h2>Una sorpresa,<br />elegida por vos.</h2></div>
+        <p>Elegí una de estas cuatro experiencias. La adaptamos con tus recuerdos y mensajes.</p>
+      </div>
+      <div class="gift-surprise-grid">
+        {giftSurprises.map((surprise) => <article><span class="gift-symbol" aria-hidden="true">{surprise.symbol}</span><h3>{surprise.name}</h3><p>{surprise.description}</p></article>)}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="catalog-section gift-builder" id="kdx-regalos-presupuesto" aria-labelledby="gift-quote-title" data-gift-builder data-whatsapp={site.whatsapp}>
+  <div class="catalog-wrap">
+    <div class="section-top">
+      <div><p class="eyebrow">Dale forma a tu idea</p><h2 id="gift-quote-title">Armá tu presupuesto.</h2></div>
+      <p>Elegí tu plan, una plantilla y los detalles que te gustaría sumar. Vas a ver el importe antes de consultarnos.</p>
+    </div>
+    <noscript><p class="gift-promo">Activá JavaScript para calcular tu presupuesto. También podés <a href={`https://wa.me/${site.whatsapp}`} target="_blank" rel="noopener noreferrer">consultarnos por WhatsApp</a> con el plan y los extras que te interesen.</p></noscript>
+    <form class="gift-quote-layout" data-gift-form>
+      <fieldset class="gift-controls" disabled data-gift-controls>
+        <legend class="gift-sr-only">Personalizá tu presupuesto</legend>
+        <div class="gift-fields">
+          <label for="gift-plan">Tu plan
+            <select id="gift-plan" name="plan">
+              {giftPlans.map((plan) => <option value={plan.id}>{plan.name} · {money(giftOffer.active ? plan.launchPrice : plan.price)}</option>)}
+              <option value="exclusivo">Diseño exclusivo · desde {money(exclusiveDesignPrice)}</option>
+            </select>
+          </label>
+          <label for="gift-template">Plantilla que te gusta
+            <select id="gift-template" name="template">
+              <option value="">Todavía no me decidí</option>
+              {giftExperiences.map((experience) => <option value={experience.slug}>{experience.title}</option>)}
+            </select>
+          </label>
+        </div>
+        <p class="gift-note" data-template-note>Podés recorrer las demos y elegir una como punto de partida.</p>
+        <p class="gift-note" data-invitation-note hidden>Esta invitación incluye fecha, ubicación, cuenta regresiva y confirmación por WhatsApp, sin costo adicional.</p>
+        <div class="gift-fields" data-premium-fields hidden>
+          <label for="gift-surprise">Tu experiencia Premium
+            <select id="gift-surprise" name="surprise" disabled>
+              {giftSurprises.map((surprise) => <option value={surprise.id}>{surprise.name}</option>)}
+            </select>
+          </label>
+          <label for="gift-media">Video o voz incluidos
+            <select id="gift-media" name="media" disabled>
+              <option value="Video personalizado">Video personalizado</option>
+              <option value="Mensaje de voz personalizado">Mensaje de voz personalizado</option>
+            </select>
+          </label>
+        </div>
+        <fieldset class="gift-extras">
+          <legend>Extras a tu medida</legend>
+          <p class="gift-note">Sumá detalles sin cambiar de plan. Lo que ya está incluido no se cobra otra vez.</p>
+          {giftExtras.map((extra) => (
+            <div class="gift-extra">
+              <label for={`gift-extra-${extra.id}`}>
+                <span>{extra.name}</span>
+                <span class="gift-extra-price" data-extra-price={extra.id}>{money(extra.price)}{extra.repeatable ? ' por unidad' : ''}</span>
+              </label>
+              {extra.repeatable ? (
+                <select id={`gift-extra-${extra.id}`} name={`extra-${extra.id}`} data-extra={extra.id} aria-label={`Cantidad: ${extra.name}`}>
+                  {Array.from({ length: 11 }, (_, quantity) => <option value={quantity}>{quantity === 0 ? 'No agregar' : `${quantity} ${extra.id === 'fotos' ? quantity === 1 ? 'paquete' : 'paquetes' : quantity === 1 ? 'ronda' : 'rondas'}`}</option>)}
+                </select>
+              ) : <input type="checkbox" id={`gift-extra-${extra.id}`} name={`extra-${extra.id}`} data-extra={extra.id} />}
+            </div>
+          ))}
+        </fieldset>
+        <p class="gift-exclusive-note"><strong>¿Buscás algo totalmente nuevo?</strong> Elegí “Diseño exclusivo” arriba: desde {money(exclusiveDesignPrice)}. Reemplaza el precio de la plantilla; el alcance y el valor final se acuerdan por WhatsApp.</p>
+        <fieldset class="gift-details">
+          <legend>Contanos un poco más <span>(opcional)</span></legend>
+          <div class="gift-fields">
+            <label for="gift-name">Tu nombre<input id="gift-name" name="customer" autocomplete="given-name" maxlength="60" placeholder="¿Cómo te llamás?" /></label>
+            <label for="gift-recipient">Para quién es<input id="gift-recipient" name="recipient" maxlength="80" placeholder="Su nombre o el motivo del regalo" /></label>
+            <label for="gift-date">Fecha en que necesitás la página<input type="date" id="gift-date" name="date" /></label>
+            <label for="gift-duration">Tiempo de publicación
+              <select id="gift-duration" name="duration">
+                <option value="incluida">{giftOffer.months} meses incluidos</option>
+                <option value="extension">Quiero consultar una extensión</option>
+              </select>
+            </label>
+          </div>
+          <label for="gift-notes">Tu idea o detalles importantes<textarea id="gift-notes" name="notes" rows="4" maxlength="600" placeholder="La canción, colores, dedicatoria o cualquier detalle que quieras contarnos…"></textarea></label>
+          <p class="gift-note">Los archivos de fotos, música y video los coordinamos después por WhatsApp.</p>
+        </fieldset>
+      </fieldset>
+      <aside class="gift-summary" aria-labelledby="gift-summary-title">
+        <p class="eyebrow">Tu regalo, a tu manera</p>
+        <h3 id="gift-summary-title">Resumen del presupuesto</h3>
+        <div aria-live="polite" aria-atomic="true" data-quote-summary>
+          <p>Activá el calculador para ver tu selección y el importe estimado.</p>
+        </div>
+        <a class="btn gift-button whatsapp" data-quote-send data-event="click_whatsapp" target="_blank" rel="noopener noreferrer" hidden>Enviar presupuesto por WhatsApp</a>
+        <p class="gift-note">Se abrirá WhatsApp con el detalle listo para revisar y enviar. Esta consulta no confirma el pedido ni realiza ningún cobro.</p>
+      </aside>
+    </form>
+    <div class="gift-terms">
+      <article><h3>{giftOffer.months} meses para compartir</h3><p>La vigencia comienza al publicar la página definitiva. Si querés conservarla más tiempo, consultanos por una extensión o renovación con costo a acordar.</p></article>
+      <article><h3>50% al confirmar, 50% al publicar</h3><p>Abonás la mitad al confirmar el pedido y el resto antes de la publicación definitiva. Coordinamos la fecha de entrega antes de comenzar.</p></article>
+      <article><h3>Correcciones sobre tu elección</h3><p>Las rondas incluidas cubren ajustes sobre el diseño elegido, no rediseños completos. En invitaciones de cumpleaños se incluyen fecha, ubicación, cuenta regresiva y confirmación por WhatsApp.</p></article>
+    </div>
+  </div>
+</section>
+<script>
+  import { initGiftQuote } from '../scripts/gift-quote';
+  initGiftQuote();
+</script>

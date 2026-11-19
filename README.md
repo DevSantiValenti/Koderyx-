@@ -37,15 +37,28 @@ src/
   scripts/         Helper de eventos de analítica
   sections/        Secciones comerciales reutilizables
   styles/          Estilos responsive, foco visible y movimiento reducido
+  data/gifts.ts    Catálogo editable de experiencias para regalar
+  styles/regalos.css Estilo original del catálogo, aislado de las demás rutas
 public/
   images/          Logos originales/optimizados, Open Graph y capturas reales
+  regalos/         Cinco demos autónomas no indexables
   favicon/         Rutas anteriores del favicon, actualizadas con el isotipo K
   robots.txt
 scripts/           Verificaciones y preparación de recursos
+docs/regalos/      Documentación de las páginas personalizadas para regalar
+private/regalos/   Prototipos originales, ignorados por Git y fuera de dist/
 netlify.toml       Build, redirecciones, caché y cabeceras
 ```
 
-Rutas: `/`, `/servicios`, `/proyectos`, `/proyectos/sonrie-plus`, `/proyectos/electrodental-nea`, `/proyectos/gimnasios`, `/proyectos/turnero-facil`, `/proyectos/escarlata-nails`, `/contacto`, `/privacidad`, `/gracias` y una página `404.html`.
+Rutas: `/`, `/servicios`, `/proyectos`, cinco fichas `/proyectos/:slug`, `/regalos`, `/contacto`, `/privacidad`, `/gracias` y una página `404.html`.
+
+## Catálogo de regalos
+
+`/regalos` reúne cinco experiencias personalizables. La página usa el layout, navegación, footer, SEO, sitemap y Google Analytics existentes; sus estilos propios están limitados a la clase temática `kdx-regalos`. Las experiencias y categorías se editan en `src/data/gifts.ts`. Los HTML completos de las demos están en `public/regalos/plantillas/`; se sirven como archivos estáticos autónomos y conservan sus interacciones, configuración, galerías, diálogos y música opcional. Se marcan `noindex` y no se incorporan al sitemap.
+
+El prototipo original y su copia de referencia se archivan en `private/regalos/`. La carpeta está excluida de Git y nunca se copia a `public/` ni a `dist/`. La documentación fuente y la guía de mantenimiento están en `docs/regalos/`.
+
+La web de Koderyx publica únicamente el catálogo y las demos. Cada experiencia personalizada que compre un cliente se prepara y publica como sitio independiente de Netlify, sin alojarla bajo el dominio principal de Koderyx. Las instrucciones de entrega están en [docs/regalos/README.md](docs/regalos/README.md).
 
 ## Configuración central y variables
 

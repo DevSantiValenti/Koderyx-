@@ -1,4 +1,4 @@
-const whatsapp = (import.meta.env.PUBLIC_WHATSAPP_NUMBER || '543624701036').replace(/\D/g, '');
+const whatsapp = (import.meta.env.PUBLIC_WHATSAPP_NUMBER || '5493624701036').replace(/\D/g, '');
 const instagram = import.meta.env.PUBLIC_INSTAGRAM_URL || 'https://www.instagram.com/koderyx/';
 const email = import.meta.env.PUBLIC_CONTACT_EMAIL || 'contacto@koderyx.com.ar';
 
@@ -21,6 +21,7 @@ export const whatsappUrl = whatsapp
 export const navigation = [
   { label: 'Inicio', href: '/' },
   { label: 'Servicios', href: '/#servicios' },
+  { label: 'Regalos', href: '/regalos' },
   { label: 'Proyectos', href: '/#proyectos' },
   { label: 'Proceso', href: '/#proceso' },
   { label: 'Nosotros', href: '/#nosotros' },

@@ -1,0 +1,34 @@
+---
+import Layout from '../layouts/Layout.astro';
+import RegalosCatalog from '../components/RegalosCatalog.astro';
+import { giftExperiences } from '../data/gifts';
+import { site } from '../config/site';
+import '../styles/regalos.css';
+import '../styles/regalos-layout.css';
+
+const schema = {
+  '@type': 'CollectionPage',
+  '@id': `${site.domain}/regalos#catalogo`,
+  name: 'Regalos digitales personalizados de Koderyx',
+  description: 'Páginas web para regalar, invitaciones digitales y sorpresas personalizadas para momentos especiales.',
+  url: `${site.domain}/regalos`,
+  inLanguage: 'es-AR',
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: giftExperiences.map((experience, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: experience.title,
+      url: `${site.domain}/regalos/plantillas/${experience.slug}.html`,
+    })),
+  },
+};
+---
+<Layout
+  title="Regalos digitales personalizados e invitaciones | Koderyx"
+  description="Regalos digitales personalizados, páginas web para regalar e invitaciones digitales. Elegí una sorpresa romántica o de cumpleaños y personalizala con Koderyx."
+  theme="regalos"
+  schema={schema}
+>
+  <RegalosCatalog />
+</Layout>

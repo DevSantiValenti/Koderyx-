@@ -7,8 +7,8 @@ import Footer from '../components/Footer.astro';
 import WhatsAppButton from '../components/WhatsAppButton.astro';
 import GoogleAnalytics from '../components/GoogleAnalytics.astro';
 import { site } from '../config/site';
-interface Props { title: string; description: string; noindex?: boolean; schema?: Record<string, unknown> | Record<string, unknown>[]; }
-const { title, description, noindex = false, schema = [] } = Astro.props;
+interface Props { title: string; description: string; noindex?: boolean; schema?: Record<string, unknown> | Record<string, unknown>[]; theme?: 'regalos'; }
+const { title, description, noindex = false, schema = [], theme } = Astro.props;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const canonical = new URL(path, site.domain).href;
 const image = new URL('/images/og-koderyx.jpg', site.domain).href;
@@ -19,7 +19,7 @@ const graph = [
 ];
 ---
 <!doctype html>
-<html lang="es-AR">
+<html lang="es-AR" class:list={{ 'kdx-regalos': theme === 'regalos' }}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

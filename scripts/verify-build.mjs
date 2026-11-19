@@ -21,6 +21,7 @@ for (const file of htmlFiles) {
   const html = await readFile(file, 'utf8');
   const path = file.slice(root.length).replace(/\/index\.html$/, '') || '/';
   pages.set(path, html);
+  const template = path.startsWith('/regalos/plantillas/');
   check(/<html[^>]*lang="es-AR"/.test(html), `${path}: falta lang es-AR`);
   check((html.match(/<h1(?:\s|>)/g) || []).length === 1, `${path}: debe tener un único H1`);
   const title = html.match(/<title>(.*?)<\/title>/)?.[1];
@@ -29,6 +30,12 @@ for (const file of htmlFiles) {
   const description = html.match(/name="description" content="([^"]+)"/)?.[1];
   check(Boolean(description) && !descriptions.has(description), `${path}: description ausente o duplicada`);
   descriptions.add(description);
+  if (template) {
+    check(/name="robots" content="noindex,\s*follow"/.test(html), `${path}: la demo debe conservar noindex`);
+    check(html.includes('href="/regalos"'), `${path}: falta el enlace de regreso al catálogo`);
+    check(!html.includes('/private/regalos/'), `${path}: referencia archivos privados`);
+    continue;
+  }
   check(html.includes(`rel="canonical" href="${domain}${path.replace('/404.html', '/404')}"`), `${path}: canonical incorrecto`);
   for (const field of ['og:title', 'og:description', 'og:url', 'og:image', 'twitter:card', 'twitter:image']) check(html.includes(`="${field}"`), `${path}: falta ${field}`);
   const utility = ['/404.html', '/gracias'].includes(path);
@@ -37,8 +44,14 @@ for (const file of htmlFiles) {
     try { const data = JSON.parse(json); check(data['@graph'].some(item => item['@type'] === 'Organization'), `${path}: falta Organization`); } catch { problems.push(`${path}: JSON-LD inválido`); }
   }
 }
+const sitePages = new Map([...pages].filter(([path]) => !path.startsWith('/regalos/plantillas/')));
+const giftCatalog = sitePages.get('/regalos') || '';
+check(giftCatalog.includes('"@type":"CollectionPage"'), '/regalos: falta schema CollectionPage');
+check((giftCatalog.match(/"@type":"ListItem"/g) || []).length === 5, '/regalos: el schema debe listar cinco experiencias');
+check(giftCatalog.includes('wa.me/5493624701036'), '/regalos: WhatsApp comercial incorrecto');
+check(!files.some(file => file.includes('/private/regalos/')), 'El archivo privado apareció en dist');
 let checkedLinks = 0;
-for (const [path, html] of pages) {
+for (const [path, html] of sitePages) {
   for (const [, , raw] of html.matchAll(/(?:href|src)=(['"])(.*?)\1/g)) {
     const href = raw.replaceAll('&amp;', '&');
     if (!href.startsWith('/') && !href.startsWith('#')) continue;
@@ -73,7 +86,7 @@ const faviconLinks = [
   '<link rel="icon" href="/favicon.ico">',
   '<link rel="apple-touch-icon" href="/apple-touch-icon.png">',
 ];
-for (const [path, html] of pages) {
+for (const [path, html] of sitePages) {
   for (const link of faviconLinks) check(html.includes(link), `${path}: falta referencia de favicon ${link}`);
 }
 const pngSignature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
@@ -87,7 +100,8 @@ const robots = await readFile(join(root, 'robots.txt'), 'utf8');
 check(robots.includes('Allow: /') && robots.includes(`${domain}/sitemap-index.xml`), 'robots.txt incorrecto');
 check(!/Disallow:\s*\/(?:favicon|apple-touch-icon)/i.test(robots), 'robots.txt bloquea el favicon');
 const sitemap = await readFile(join(root, 'sitemap-0.xml'), 'utf8');
-for (const path of pages.keys()) if (!['/gracias', '/404.html'].includes(path)) check(sitemap.includes(`<loc>${domain}${path === '/' ? '/' : path}</loc>`), `sitemap: falta ${path}`);
+check(!sitemap.includes('/regalos/plantillas/'), 'sitemap: las demos no deben indexarse');
+for (const path of sitePages.keys()) if (!['/gracias', '/404.html'].includes(path)) check(sitemap.includes(`<loc>${domain}${path === '/' ? '/' : path}</loc>`), `sitemap: falta ${path}`);
 check(!sitemap.includes('/gracias') && !sitemap.includes('/404'), 'sitemap: páginas auxiliares incluidas');
 assert.equal(problems.length, 0, problems.join('\n'));
-console.log(`Verificación OK: ${pages.size} páginas, ${checkedLinks} enlaces/recursos, metadatos, JSON-LD, formularios, robots y sitemap.`);
+console.log(`Verificación OK: ${sitePages.size} páginas Astro y ${pages.size - sitePages.size} demos, ${checkedLinks} enlaces/recursos, metadatos, JSON-LD, formularios, robots y sitemap.`);

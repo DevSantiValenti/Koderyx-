@@ -1,0 +1,45 @@
+ :where(html.kdx-regalos) .site-header {
+  font-family: var(--font);
+}
+
+ :where(html.kdx-regalos) .mini-love > p,
+:where(html.kdx-regalos) .mini-letter > p {
+  color: #51303a;
+}
+
+:where(html.kdx-regalos) #kdx-regalos-contacto > div > p {
+  color: #243411;
+}
+
+:where(html.kdx-regalos) .main-nav > .button {
+  color: #172008;
+}
+
+@media (max-width: 1150px) {
+  :where(html.kdx-regalos) .collage-orbit {
+    inset: 14%;
+  }
+
+  :where(html.kdx-regalos) .mini-birthday {
+    right: 5%;
+  }
+}
+
+@media (max-width: 800px) {
+  :where(html.kdx-regalos) .catalog-hero {
+    grid-template-columns: 1fr;
+  }
+
+  :where(html.kdx-regalos) .hero-collage {
+    height: 395px;
+    max-width: 420px;
+    width: 100%;
+    margin: auto;
+  }
+}
+
+@media (max-width: 760px) {
+  :where(html.kdx-regalos) .collage-orbit {
+    inset: 14%;
+  }
+}

@@ -1,0 +1,145 @@
+---
+import { giftExperiences } from '../data/gifts';
+import { site } from '../config/site';
+import RegalosPricing from './RegalosPricing.astro';
+
+const contactUrl = (model?: string) => {
+  const message = model
+    ? `¡Hola, Koderyx! Quiero personalizar el modelo «${model}».`
+    : '¡Hola, Koderyx! Quiero una página personalizada para un momento especial.';
+  return `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(message)}`;
+};
+---
+<div class="catalog" data-kdx-regalos>
+  <div class="catalog-wrap">
+    <section class="catalog-hero">
+      <div>
+        <p class="eyebrow"><span class="dot"></span> No es solo una página. Es un momento.</p>
+        <h1>Regalá algo<br />que no se<br /><em>olvida.</em></h1>
+        <p class="lead">Páginas web personalizadas para momentos especiales</p>
+        <div class="actions">
+          <a class="btn" href="#kdx-regalos-coleccion">Encontrá tu experiencia <span aria-hidden="true">↗</span></a>
+          <a class="btn secondary" href="#kdx-regalos-planes">Ver planes y precios</a>
+        </div>
+        <p class="under-cta"><span aria-hidden="true">✧</span> Tu historia. Un enlace. Algo inolvidable.</p>
+      </div>
+      <div class="hero-collage" aria-hidden="true">
+        <div class="collage-orbit"></div>
+        <div class="mini mini-love"><p>Hay algo que quiero decirte</p><span class="motif">♡</span><h3>Me gustás.<br />Así, simple.</h3><p>Un pequeño gran comienzo</p></div>
+        <div class="mini mini-birthday"><span class="motif">✦</span><p>Hoy es tu día</p><h3>Un regalo<br />para vos.</h3><p>Pedí un deseo</p></div>
+        <div class="mini mini-letter"><span class="motif">♡</span><h3>Algunas palabras,<br />desde el corazón.</h3><p>Para alguien especial</p></div>
+      </div>
+    </section>
+    <div class="collection-strip">
+      <span><i>♡</i> Historias de amor</span>
+      <span><i>✦</i> Cumpleaños</span>
+      <span><i>↗</i> Invitaciones</span>
+      <span><i>◇</i> Nuevos comienzos</span>
+    </div>
+    <section id="kdx-regalos-coleccion" class="catalog-section" tabindex="-1">
+      <div class="section-top">
+        <div><p class="eyebrow">La colección</p><h2>Cada historia,<br />su propia forma.</h2></div>
+        <p>Explorá las demos. Imaginá tus fotos, tus palabras y esa persona del otro lado.</p>
+      </div>
+      <div class="filters" role="group" aria-label="Filtrar experiencias">
+        <button data-filter="all" aria-pressed="true">Todas</button>
+        <button data-filter="amor" aria-pressed="false">Amor y encuentros</button>
+        <button data-filter="cumple" aria-pressed="false">Cumpleaños</button>
+      </div>
+      <div class="collection-grid">
+        {giftExperiences.map((experience) => (
+          <article class="experience" data-category={experience.category}>
+            <div class:list={['preview', experience.previewClass]} aria-hidden="true">
+              <div><span class="preview-icon">{experience.symbol}</span><small>Una experiencia para alguien especial</small><h3>{experience.previewTitle[0]}<br />{experience.previewTitle[1]}</h3></div>
+            </div>
+            <div class="card-copy">
+              <span class="card-tag">{experience.tag}</span>
+              <h3>{experience.title}</h3>
+              <p>{experience.description}</p>
+              <a href={`/regalos/plantillas/${experience.slug}.html`} aria-label={`Ver demostración de ${experience.title}`}>Ver demostración <span aria-hidden="true">↗</span></a>
+              <a href="#kdx-regalos-presupuesto" data-quote-template={experience.slug} aria-label={`Presupuestar ${experience.title}`}>Presupuestar este modelo</a>
+              <a class="whatsapp model-request" href={contactUrl(experience.title)} data-event="click_whatsapp" target="_blank" rel="noopener noreferrer" aria-label={`Solicitar ${experience.title} por WhatsApp`}>Solicitar este modelo <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+        ))}
+      </div>
+      <p class="filter-status" id="kdx-regalos-filterStatus" role="status">5 experiencias para hacer tuyas.</p>
+    </section>
+  </div>
+  <RegalosPricing />
+  <section class="catalog-section" aria-labelledby="kdx-regalos-ocasiones">
+    <div class="catalog-wrap">
+      <div class="section-top">
+        <div><p class="eyebrow">Un regalo que cuenta tu historia</p><h2 id="kdx-regalos-ocasiones">Regalos digitales personalizados<br />para cada ocasión.</h2></div>
+        <p>Una página web para regalar reúne tus palabras, fotos y recuerdos en una experiencia que podés compartir con un enlace.</p>
+      </div>
+      <div class="steps">
+        <article><h3>Sorpresas románticas</h3><p>Una carta para expresarte, un pedido de noviazgo o una propuesta de matrimonio: explorá nuestras <a href="/regalos/plantillas/pedido-noviazgo.html">páginas románticas personalizables</a> y elegí cómo contar tu historia.</p></article>
+        <article><h3>Un cumpleaños diferente</h3><p>Para amistades, familia o pareja: el <a href="/regalos/plantillas/feliz-cumpleanos.html">regalo digital de cumpleaños</a> combina una dedicatoria, fotografías y una caja con un mensaje sorpresa.</p></article>
+        <article><h3>Invitaciones digitales</h3><p>Compartí los detalles de tu festejo con una <a href="/regalos/plantillas/invitacion-cumpleanos.html">invitación digital de cumpleaños</a>: fecha, cuenta regresiva, ubicación y confirmación por WhatsApp.</p></article>
+      </div>
+    </div>
+  </section>
+  <section class="how catalog-section" id="kdx-regalos-como-funciona">
+    <div class="catalog-wrap">
+      <div class="section-top">
+        <div><p class="eyebrow">Del «tengo una idea» al «esto es para vos»</p><h2>Vos ponés la historia.<br />Nosotros, la magia.</h2></div>
+        <p>Lo coordinamos directamente con vos, por WhatsApp.</p>
+      </div>
+      <div class="steps">
+        <article><div class="step-icon" aria-hidden="true">↗</div><h3>Elegí tu experiencia</h3><p>Recorré las demostraciones y encontrá la que mejor acompaña lo que querés decir.</p></article>
+        <article><div class="step-icon" aria-hidden="true">✎</div><h3>Hacela tuya</h3><p>Compartinos tus textos, fotos y detalles. Acordamos el alcance, el valor y la fecha de entrega.</p></article>
+        <article><div class="step-icon" aria-hidden="true">♡</div><h3>Compartí el momento</h3><p>Revisás el resultado y, una vez listo, recibís un enlace para regalar por mensaje.</p></article>
+      </div>
+    </div>
+  </section>
+  <section class="catalog-section">
+    <div class="catalog-wrap personalization">
+      <div><p class="eyebrow">Hecho con tu historia</p><h2>Nadie más podría<br />regalar lo mismo.</h2><p class="lead">El diseño es el comienzo. Los detalles que elegís son los que convierten una página en algo personal.</p></div>
+      <div class="feature-list">
+        <div><span>✧</span>Nombres y dedicatorias</div><div><span>✧</span>Fotos y recuerdos</div><div><span>✧</span>Colores y estilo</div>
+        <div><span>✧</span>Fechas importantes</div><div><span>✧</span>Música opcional</div><div><span>✧</span>Detalles del evento</div>
+      </div>
+    </div>
+  </section>
+  <section class="catalog-section how">
+    <div class="catalog-wrap faq-layout">
+      <div><p class="eyebrow">Antes de empezar</p><h2>Quizás te estés<br />preguntando…</h2></div>
+      <div>
+        <details><summary>¿Cómo recibe la página esa persona?</summary><p>Con un enlace propio que podés enviar por WhatsApp, mensaje de Instagram o el medio que prefieras. La página final se publica en un sitio de Netlify independiente del dominio principal de Koderyx y se abre en el navegador.</p></details>
+        <details><summary>¿Puedo cambiar los textos y las fotos?</summary><p>Sí. Personalizamos nombres, dedicatorias, fotografías, colores y los detalles de tu experiencia. Las imágenes de las demos son espacios de muestra.</p></details>
+        <details><summary>¿Se puede agregar música?</summary><p>Sí, de forma opcional, con un archivo que tengas permiso para usar. La persona decide cuándo reproducirla desde un botón.</p></details>
+        <details><summary>¿Cuánto cuesta y cuándo se entrega?</summary><p>Podés ver los <a href="#kdx-regalos-planes">planes y precios</a> y <a href="#kdx-regalos-presupuesto">armar tu presupuesto</a> con los extras que quieras. Confirmamos el alcance, la disponibilidad de la promoción y la fecha de entrega por WhatsApp antes de comenzar.</p></details>
+        <details><summary>¿Cuánto tiempo queda publicada?</summary><p>El precio incluye 3 meses desde la publicación definitiva. Podés solicitar una extensión o renovación; su duración y costo se acuerdan por WhatsApp.</p></details>
+        <details><summary>¿Cómo se paga y qué correcciones incluye?</summary><p>Abonás el 50% al confirmar el pedido y el 50% restante antes de publicar la página definitiva. Cada plan indica sus rondas de correcciones: son ajustes sobre el diseño elegido, no rediseños completos.</p></details>
+        <details><summary>¿Funciona en el celular?</summary><p>Sí. Las experiencias están pensadas para teléfonos y también se adaptan a tablets y computadoras. No requieren instalar una aplicación.</p></details>
+        <details><summary>¿La invitación guarda confirmaciones?</summary><p>La confirmación abre WhatsApp con un mensaje para el anfitrión. No se guardan listas de invitados ni respuestas en la página.</p></details>
+        <details><summary>¿El enlace es privado?</summary><p>Una página publicada puede ser vista por quien tenga el enlace. No incluye contraseña; conviene elegir con cuidado qué fotos y datos querés compartir.</p></details>
+      </div>
+    </div>
+  </section>
+  <section class="catalog-wrap contact-wrap" style="padding-top:65px;padding-bottom:0">
+    <div class="contact-panel" id="kdx-regalos-contacto">
+      <div><h2>Hagamos de tu idea<br />un lindo recuerdo.</h2><p>Contanos a quién querés sorprender.</p></div>
+      <a class="btn whatsapp" href={contactUrl()} data-event="click_whatsapp" target="_blank" rel="noopener noreferrer">Solicitar mi página <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+</div>
+<script>
+  const catalog = document.querySelector<HTMLElement>('[data-kdx-regalos]');
+  if (catalog) {
+    const buttons = [...catalog.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+    const cards = [...catalog.querySelectorAll<HTMLElement>('[data-category]')];
+    const status = catalog.querySelector<HTMLElement>('#kdx-regalos-filterStatus');
+
+    buttons.forEach((button) => button.addEventListener('click', () => {
+      buttons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+      let count = 0;
+      cards.forEach((card) => {
+        card.hidden = button.dataset.filter !== 'all' && card.dataset.category !== button.dataset.filter;
+        if (!card.hidden) count += 1;
+      });
+      if (status) status.textContent = `${count} experiencias para hacer tuyas.`;
+    }));
+  }
+</script>

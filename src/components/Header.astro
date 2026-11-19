@@ -11,7 +11,7 @@ const pathname = Astro.url.pathname;
       <span></span><span></span>
     </button>
     <nav id="main-navigation" class="main-nav" aria-label="Navegación principal">
-      {navigation.map((item) => <a href={item.href} class:list={{ active: item.href === '/' && pathname === '/' }} aria-current={item.href === '/' && pathname === '/' ? 'page' : undefined}>{item.label}</a>)}
+      {navigation.map((item) => <a href={item.href} class:list={{ active: item.href === '/' ? pathname === '/' : item.href === pathname }} aria-current={item.href === '/' ? (pathname === '/' ? 'page' : undefined) : item.href === pathname ? 'page' : undefined}>{item.label}</a>)}
       <a class="button button-small" href="/contacto" data-event="click_presupuesto">Solicitar presupuesto <Icon name="diagonal" size={16} /></a>
     </nav>
   </div>

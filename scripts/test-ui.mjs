@@ -9,7 +9,7 @@ const root = resolve('dist');
 const base = 'https://koderyx.test';
 const browser = await chromium.launch({ ...(process.env.BROWSER_PATH ? { executablePath: process.env.BROWSER_PATH } : {}), headless: true, args: ['--no-sandbox'] });
 const errors = [], checks = [], violations = [];
-const routes = ['/', '/servicios', '/proyectos', '/proyectos/sonrie-plus', '/proyectos/electrodental-nea', '/proyectos/gimnasios', '/proyectos/turnero-facil', '/proyectos/escarlata-nails', '/contacto', '/privacidad', '/gracias', '/404.html'];
+const routes = ['/', '/servicios', '/proyectos', '/proyectos/sonrie-plus', '/proyectos/electrodental-nea', '/proyectos/gimnasios', '/proyectos/turnero-facil', '/proyectos/escarlata-nails', '/contacto', '/privacidad', '/regalos', '/regalos/plantillas/reconciliacion.html', '/regalos/plantillas/pedido-noviazgo.html', '/regalos/plantillas/feliz-cumpleanos.html', '/regalos/plantillas/invitacion-cumpleanos.html', '/regalos/plantillas/propuesta-matrimonio.html', '/gracias', '/404.html'];
 const mime = { '.html': 'text/html', '.css': 'text/css', '.js': 'application/javascript', '.webp': 'image/webp', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.xml': 'application/xml', '.txt': 'text/plain' };
 const posts = [], postPaths = [];
 let failPost = false;
@@ -53,8 +53,18 @@ try {
         const width = document.documentElement.clientWidth;
         return [...document.querySelectorAll('body *')].filter(element => {
           const style = getComputedStyle(element);
+          if (style.display === 'none' || style.position === 'fixed') return false;
           const rect = element.getBoundingClientRect();
-          return style.display !== 'none' && style.position !== 'fixed' && rect.width > 0 && (rect.right > width + 1 || rect.left < -1);
+          let left = rect.left;
+          let right = rect.right;
+          for (let parent = element.parentElement; parent; parent = parent.parentElement) {
+            const parentStyle = getComputedStyle(parent);
+            if (!['hidden', 'clip', 'scroll', 'auto'].includes(parentStyle.overflowX)) continue;
+            const parentRect = parent.getBoundingClientRect();
+            left = Math.max(left, parentRect.left);
+            right = Math.min(right, parentRect.right);
+          }
+          return right > left && (right > width + 1 || left < -1);
         }).map(element => `${element.tagName}.${element.className}`);
       });
       assert.equal(overflowing.length, 0, `Overflow ${width}px ${path}: ${overflowing.join(', ')}`);
@@ -73,7 +83,7 @@ try {
           return images.length === 2 && images.every(image => image.complete && image.naturalWidth > 0);
         });
       }
-      if ([390, 1440].includes(width) && ['/', '/contacto', '/proyectos/sonrie-plus', '/proyectos/electrodental-nea', '/proyectos/gimnasios', '/proyectos/turnero-facil', '/proyectos/escarlata-nails', '/servicios', '/privacidad'].includes(path)) {
+      if ([390, 1440].includes(width) && ['/', '/contacto', '/proyectos/sonrie-plus', '/proyectos/electrodental-nea', '/proyectos/gimnasios', '/proyectos/turnero-facil', '/proyectos/escarlata-nails', '/servicios', '/privacidad', '/regalos'].includes(path)) {
         const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
         violations.push(...result.violations.map(item => ({ width, path, id: item.id, impact: item.impact, nodes: item.nodes.map(node => ({ target: node.target, summary: node.failureSummary })) })));
       }
@@ -91,6 +101,20 @@ try {
   await menu.click();
   await page.locator('#main-navigation').getByRole('link', { name: 'Servicios', exact: true }).click();
   assert.equal(await menu.getAttribute('aria-expanded'), 'false');
+  await page.goto(base + '/regalos');
+  assert.equal(await page.locator('#main-navigation a[href="/regalos"]').getAttribute('aria-current'), 'page');
+  const giftCards = page.locator('[data-kdx-regalos] .experience');
+  assert.equal(await giftCards.count(), 5);
+  await page.locator('[data-filter="cumple"]').click();
+  assert.equal(await page.locator('[data-kdx-regalos] .experience[data-category="cumple"]:visible').count(), 2);
+  assert.equal(await page.locator('#kdx-regalos-filterStatus').textContent(), '2 experiencias para hacer tuyas.');
+  assert((await page.locator('.model-request').first().getAttribute('href')).includes('wa.me/5493624701036'));
+  await page.locator('[data-filter="all"]').click();
+  await page.getByRole('link', { name: 'Ver demostración de Una segunda oportunidad' }).click();
+  await page.waitForURL(base + '/regalos/plantillas/reconciliacion.html');
+  assert.equal(await page.locator('meta[name="robots"]').getAttribute('content'), 'noindex,follow');
+  assert.equal(await page.locator('h1').count(), 1);
+  await page.goto(base + '/');
   const question = page.locator('summary').first();
   await question.focus();
   await page.keyboard.press('Enter');
@@ -156,4 +180,4 @@ try {
 // The intentional mocked HTTP 503 may be reported by Chromium; all other errors fail.
 assert.deepEqual(errors.filter(error => !error.includes('503')), []);
 assert.deepEqual(violations, [], 'Revisar reports/ui-results.json: accesibilidad');
-console.log(`UI OK: ${checks.length} verificaciones responsive, teclado, menú, FAQ, proyecto, formulario (error y éxito simulados), sin JavaScript y auditorías de accesibilidad.`);
+console.log(`UI OK: ${checks.length} verificaciones responsive, catálogo y demos, teclado, menú, FAQ, proyecto, formulario (error y éxito simulados), sin JavaScript y auditorías de accesibilidad.`);
