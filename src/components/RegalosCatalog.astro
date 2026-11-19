@@ -2,6 +2,7 @@
 import { giftExperiences } from '../data/gifts';
 import { site } from '../config/site';
 import RegalosPricing from './RegalosPricing.astro';
+import '../styles/regalos-catalog-links.css';
 
 const contactUrl = (model?: string) => {
   const message = model
@@ -49,9 +50,12 @@ const contactUrl = (model?: string) => {
       <div class="collection-grid">
         {giftExperiences.map((experience) => (
           <article class="experience" data-category={experience.category}>
-            <div class:list={['preview', experience.previewClass]} aria-hidden="true">
-              <div><span class="preview-icon">{experience.symbol}</span><small>Una experiencia para alguien especial</small><h3>{experience.previewTitle[0]}<br />{experience.previewTitle[1]}</h3></div>
-            </div>
+            <a class="preview-link" href={`/regalos/plantillas/${experience.slug}.html`} aria-label={`Ver demostración de ${experience.title}`}>
+              <div class:list={['preview', experience.previewClass]} aria-hidden="true">
+                <div><span class="preview-icon">{experience.symbol}</span><small>Una experiencia para alguien especial</small><h3>{experience.previewTitle[0]}<br />{experience.previewTitle[1]}</h3></div>
+              </div>
+              <span class="preview-link-label" aria-hidden="true">Ver demostración</span>
+            </a>
             <div class="card-copy">
               <span class="card-tag">{experience.tag}</span>
               <h3>{experience.title}</h3>
