@@ -60,15 +60,26 @@ try {
   await plan.selectOption('estandar');
   assert.equal(await amount(), 29900, 'An included extra must not silently reappear when downgrading');
   await page.locator('#gift-extra-fotos').selectOption('0');
-  await page.locator('#gift-extra-minijuego').check();
   await page.locator('#gift-extra-carta').check();
   await plan.selectOption('premium');
   await page.locator('#gift-surprise').selectOption('minijuego');
   assert.equal(await amount(), 51900, 'Premium minigame is included; the additional letter costs 7000');
-  assert(await page.locator('#gift-extra-minijuego').isDisabled());
+  assert.equal(await page.locator('#gift-extra-minijuego').count(), 0, 'The minigame must only be offered as a Premium experience');
+  assert.equal(await page.locator('[data-selected-name]').textContent(), 'Minijuego personalizado');
+  assert.equal(await page.locator('[data-selected-type]').textContent(), 'Juego para desbloquear el mensaje');
+  assert.match(await page.locator('[data-selected-interaction]').textContent(), /preguntas sobre la pareja/i);
+  assert.match(await page.locator('[data-selected-requirements]').textContent(), /preguntas y respuestas/i);
+  assert.match(await page.locator('[data-selected-result]').textContent(), /navegador/i);
   await page.locator('#gift-surprise').selectOption('carta');
   assert.equal(await amount(), 44900);
   assert(await page.locator('#gift-extra-carta').isDisabled());
+  assert.equal(await page.locator('[data-selected-type]').textContent(), 'Carta animada desbloqueable');
+  await page.locator('#gift-surprise').selectOption('historia');
+  assert.equal(await page.locator('#gift-surprise option:checked').textContent(), 'Nuestra historia · Línea de tiempo interactiva');
+  assert.equal(await page.locator('[data-selected-type]').textContent(), 'Línea de tiempo interactiva');
+  assert.match(await page.locator('[data-selected-description]').textContent(), /recorrido cronológico/i);
+  assert.match(await page.locator('[data-selected-requirements]').textContent(), /4 y 8 momentos/i);
+  await page.locator('#gift-surprise').selectOption('carta');
   await page.locator('#gift-media').selectOption('Mensaje de voz personalizado');
   await page.locator('#gift-template').selectOption('invitacion-cumpleanos');
   await page.locator('#gift-name').fill('Ana & Juan');
@@ -77,7 +88,7 @@ try {
   await page.locator('#gift-notes').fill('Verde, canción propia & una dedicatoria <especial>.');
   await page.locator('#gift-duration').selectOption('extension');
   let text = await message();
-  for (const expected of ['Premium', 'Estás invitado/a', 'Carta secreta', 'Mensaje de voz', 'Ana & Juan', 'María', '25/12/2026', '<especial>', '3 meses', 'Extensión solicitada', '$44.900', '$22.450', 'primeros 5 clientes', 'cuenta regresiva']) assert(text.includes(expected), `WhatsApp missing: ${expected}`);
+  for (const expected of ['Premium', 'Estás invitado/a', 'Carta secreta', 'Carta animada desbloqueable', 'Cómo funciona:', 'Material necesario:', 'Mensaje de voz', 'Ana & Juan', 'María', '25/12/2026', '<especial>', '3 meses', 'Extensión solicitada', '$44.900', '$22.450', 'primeros 5 clientes', 'cuenta regresiva']) assert(text.includes(expected), `WhatsApp missing: ${expected}`);
   assert.equal(new URL(await send.getAttribute('href')).pathname, '/5493624701036');
   // Inspect the action without sending a real WhatsApp message.
   await page.evaluate(() => document.querySelector('[data-quote-send]').addEventListener('click', (event) => { event.preventDefault(); window.quoteClicked = true; }));
@@ -95,7 +106,7 @@ try {
   for (const extra of giftExtras.filter((item) => !item.repeatable)) await page.locator(`#gift-extra-${extra.id}`).check();
   await page.locator('#gift-extra-fotos').selectOption('2');
   await page.locator('#gift-extra-correcciones').selectOption('2');
-  assert.equal(await amount(), 140000);
+  assert.equal(await amount(), 130000);
   await page.locator('[data-quote-template="pedido-noviazgo"]').click();
   assert.equal(await plan.inputValue(), 'estandar');
   assert.equal(await page.locator('#gift-template').inputValue(), 'pedido-noviazgo');

@@ -21,6 +21,22 @@ export function initGiftQuote() {
     input.dataset.extra!, input instanceof HTMLInputElement ? Number(input.checked) : Number(input.value),
   ]));
 
+  function updateSurpriseDetails() {
+    const selected = surprise.selectedOptions[0];
+    if (!selected) return;
+    const setText = (selector: string, value = '') => {
+      const element = form!.querySelector<HTMLElement>(selector);
+      if (element) element.textContent = value;
+    };
+    setText('[data-selected-symbol]', selected.dataset.symbol);
+    setText('[data-selected-name]', selected.dataset.name);
+    setText('[data-selected-type]', selected.dataset.type);
+    setText('[data-selected-description]', selected.dataset.description);
+    setText('[data-selected-interaction]', selected.dataset.interaction);
+    setText('[data-selected-requirements]', selected.dataset.requirements);
+    setText('[data-selected-result]', selected.dataset.result);
+  }
+
   function update() {
     let quote = calculateGiftQuote({ plan: plan.value, surprise: surprise.value, extras: quantities() });
     extraInputs.forEach((input) => {
@@ -36,6 +52,7 @@ export function initGiftQuote() {
     quote = calculateGiftQuote({ plan: plan.value, surprise: surprise.value, extras: quantities() });
     form!.querySelector<HTMLElement>('[data-premium-fields]')!.hidden = !quote.premium;
     surprise.disabled = media.disabled = !quote.premium;
+    updateSurpriseDetails();
     template.disabled = quote.exclusive;
     form!.querySelector<HTMLElement>('[data-template-note]')!.textContent = quote.exclusive
       ? 'Diseño creado desde cero. La cantidad de fotos, las correcciones y las interacciones se definen al cotizar.'
@@ -63,7 +80,7 @@ export function initGiftQuote() {
     paragraph(quote.name, 'gift-summary-plan');
     paragraph(`Plantilla: ${templateName}`, 'gift-note');
     paragraph(capacity, 'gift-note');
-    if (quote.surprise) paragraph(`Sorpresa incluida: ${quote.surprise.name}. ${media.value} incluido.`, 'gift-note');
+    if (quote.surprise) paragraph(`Sorpresa incluida: ${quote.surprise.name} · ${quote.surprise.type}. ${media.value} incluido.`, 'gift-note');
     const list = document.createElement('dl');
     list.className = 'gift-breakdown';
     for (const [label, price] of [
@@ -100,7 +117,12 @@ export function initGiftQuote() {
       `Plantilla: ${templateName}`,
       `Base${quote.promotion ? ' de lanzamiento' : ''}: ${prefix}${money(quote.basePrice)} ARS`,
       capacity,
-      ...(quote.surprise ? [`Experiencia Premium: ${quote.surprise.name}`, `Contenido incluido: ${media.value}`] : []),
+      ...(quote.surprise ? [
+        `Experiencia Premium: ${quote.surprise.name} · ${quote.surprise.type}`,
+        `Cómo funciona: ${quote.surprise.interaction}`,
+        `Material necesario: ${quote.surprise.requirements}`,
+        `Contenido incluido: ${media.value}`,
+      ] : []),
       ...(invitation ? ['Invitación: fecha, ubicación, cuenta regresiva y confirmación por WhatsApp incluidas.'] : []),
       'Extras:',
       ...(quote.extras.length ? quote.extras.map((extra) => `• ${extra.name} × ${extra.quantity}: ${money(extra.total)}`) : ['Sin extras adicionales.']),

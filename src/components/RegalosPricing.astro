@@ -26,16 +26,7 @@ import '../styles/regalos-pricing.css';
       ))}
     </div>
     <p class="gift-note">Los planes adaptan una plantilla existente; no incluyen un diseño exclusivo desde cero. Las fotografías y rondas indicadas son el total de cada plan.</p>
-    <p class="gift-note">* La música debe contar con permiso o licencia de uso. El visitante deberá interactuar para reproducirla.</p>
-    <div class="gift-surprises">
-      <div class="section-top">
-        <div><p class="eyebrow">Incluido en Premium</p><h2>Una sorpresa,<br />elegida por vos.</h2></div>
-        <p>Elegí una de estas cuatro experiencias. La adaptamos con tus recuerdos y mensajes.</p>
-      </div>
-      <div class="gift-surprise-grid">
-        {giftSurprises.map((surprise) => <article><span class="gift-symbol" aria-hidden="true">{surprise.symbol}</span><h3>{surprise.name}</h3><p>{surprise.description}</p></article>)}
-      </div>
-    </div>
+    <p class="gift-note">* El visitante deberá interactuar para reproducirla.</p>
   </div>
 </section>
 
@@ -68,7 +59,18 @@ import '../styles/regalos-pricing.css';
         <div class="gift-fields" data-premium-fields hidden>
           <label for="gift-surprise">Tu experiencia Premium
             <select id="gift-surprise" name="surprise" disabled>
-              {giftSurprises.map((surprise) => <option value={surprise.id}>{surprise.name}</option>)}
+              {giftSurprises.map((surprise) => (
+                <option
+                  value={surprise.id}
+                  data-name={surprise.name}
+                  data-symbol={surprise.symbol}
+                  data-type={surprise.type}
+                  data-description={surprise.description}
+                  data-interaction={surprise.interaction}
+                  data-requirements={surprise.requirements}
+                  data-result={surprise.result}
+                >{surprise.optionLabel}</option>
+              ))}
             </select>
           </label>
           <label for="gift-media">Video o voz incluidos
@@ -77,6 +79,18 @@ import '../styles/regalos-pricing.css';
               <option value="Mensaje de voz personalizado">Mensaje de voz personalizado</option>
             </select>
           </label>
+          <article class="gift-selected-surprise" data-selected-surprise aria-live="polite">
+            <div class="gift-selected-heading">
+              <span class="gift-selected-symbol" data-selected-symbol aria-hidden="true">{giftSurprises[0].symbol}</span>
+              <div><span class="gift-feasible">Se puede hacer</span><h3 data-selected-name>{giftSurprises[0].name}</h3><p data-selected-type>{giftSurprises[0].type}</p></div>
+            </div>
+            <p data-selected-description>{giftSurprises[0].description}</p>
+            <dl>
+              <div><dt>Cómo funciona</dt><dd data-selected-interaction>{giftSurprises[0].interaction}</dd></div>
+              <div><dt>Qué necesitamos</dt><dd data-selected-requirements>{giftSurprises[0].requirements}</dd></div>
+              <div><dt>Qué recibe la persona</dt><dd data-selected-result>{giftSurprises[0].result}</dd></div>
+            </dl>
+          </article>
         </div>
         <fieldset class="gift-extras">
           <legend>Extras a tu medida</legend>
@@ -85,6 +99,7 @@ import '../styles/regalos-pricing.css';
             <div class="gift-extra">
               <label for={`gift-extra-${extra.id}`}>
                 <span>{extra.name}</span>
+                {'description' in extra && <small class="gift-extra-description">{extra.description}</small>}
                 <span class="gift-extra-price" data-extra-price={extra.id}>{money(extra.price)}{extra.repeatable ? ' por unidad' : ''}</span>
               </label>
               {extra.repeatable ? (

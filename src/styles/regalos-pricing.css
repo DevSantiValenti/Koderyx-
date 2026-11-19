@@ -24,11 +24,6 @@
 :where(html.kdx-regalos) .gift-button { background: var(--kdx-regalos-accent); color: #172008; border-radius: 30px; width: 100%; font-size: 1rem; text-align: center; }
 :where(html.kdx-regalos) .gift-plan .gift-button { margin-top: auto; }
 :where(html.kdx-regalos) .gift-note { font-size: .875rem; line-height: 1.65; color: #bfc9b3; margin: 14px 0; }
-:where(html.kdx-regalos) .gift-surprises { padding-top: 64px; }
-:where(html.kdx-regalos) .gift-surprise-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
-:where(html.kdx-regalos) .gift-surprise-grid article { border-top: 1px solid var(--kdx-regalos-line); padding-top: 20px; }
-:where(html.kdx-regalos) .gift-symbol { font: 2.4rem Georgia, serif; color: var(--kdx-regalos-accent); display: block; margin-bottom: 20px; }
-:where(html.kdx-regalos) .gift-surprise-grid p { color: #bfc9b3; font-size: 1rem; }
 :where(html.kdx-regalos) .gift-builder { background: #151912; border-block: 1px solid var(--kdx-regalos-line); }
 :where(html.kdx-regalos) .gift-quote-layout { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr); gap: 40px; align-items: start; }
 :where(html.kdx-regalos) .gift-controls,
@@ -36,6 +31,18 @@
 :where(html.kdx-regalos) .gift-extras { border: 0; padding: 0; margin: 0; min-width: 0; }
 :where(html.kdx-regalos) .gift-controls legend { color: var(--kdx-regalos-ink); }
 :where(html.kdx-regalos) .gift-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+:where(html.kdx-regalos) [data-premium-fields] .gift-selected-surprise { grid-column: 1 / -1; }
+:where(html.kdx-regalos) .gift-selected-surprise { border: 1px solid #657f43; border-radius: 14px; padding: 22px; background: #20281a; }
+:where(html.kdx-regalos) .gift-selected-heading { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+:where(html.kdx-regalos) .gift-selected-symbol { display: grid; place-items: center; flex: 0 0 54px; width: 54px; height: 54px; border: 1px solid #657f43; border-radius: 50%; color: var(--kdx-regalos-accent); font: 1.8rem Georgia, serif; }
+:where(html.kdx-regalos) .gift-selected-heading h3 { margin: 2px 0; font-size: 1.25rem; }
+:where(html.kdx-regalos) .gift-selected-heading p { margin: 0; color: #bfc9b3; font-size: .875rem; }
+:where(html.kdx-regalos) .gift-feasible { display: inline-block; color: var(--kdx-regalos-accent); font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+:where(html.kdx-regalos) .gift-selected-surprise > p { color: #d5dec9; margin-bottom: 18px; }
+:where(html.kdx-regalos) .gift-selected-surprise dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 0; }
+:where(html.kdx-regalos) .gift-selected-surprise dl div { min-width: 0; border-top: 1px solid #4d5e3c; padding-top: 12px; }
+:where(html.kdx-regalos) .gift-selected-surprise dt { color: #f0f4ea; font-weight: 700; font-size: .875rem; }
+:where(html.kdx-regalos) .gift-selected-surprise dd { margin: 6px 0 0; color: #bfc9b3; font-size: .875rem; line-height: 1.6; }
 :where(html.kdx-regalos) .gift-controls label { display: flex; flex-direction: column; gap: 8px; font-size: 1rem; min-width: 0; }
 :where(html.kdx-regalos) .gift-controls input:not([type='checkbox']),
 :where(html.kdx-regalos) .gift-controls select,
@@ -52,6 +59,7 @@
 :where(html.kdx-regalos) .gift-details legend span { font-size: .875rem; color: #bfc9b3; font-weight: 400; }
 :where(html.kdx-regalos) .gift-extra { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--kdx-regalos-line); }
 :where(html.kdx-regalos) .gift-extra label { flex: 1; gap: 2px; cursor: pointer; }
+:where(html.kdx-regalos) .gift-extra-description { display: block; max-width: 520px; color: #bfc9b3; font-size: .875rem; line-height: 1.55; margin: 4px 0; }
 :where(html.kdx-regalos) .gift-extra-price { color: #c0f36a; font-size: .875rem; }
 :where(html.kdx-regalos) .gift-extra select { flex: 0 0 145px; width: 145px; font-size: .875rem; }
 :where(html.kdx-regalos) .gift-extra input[type='checkbox'] { flex-shrink: 0; width: 24px; height: 24px; margin: 10px; accent-color: var(--kdx-regalos-accent); cursor: pointer; }
@@ -78,6 +86,7 @@
   :where(html.kdx-regalos) .gift-quote-layout { gap: 24px; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); }
   :where(html.kdx-regalos) .gift-summary { padding: 24px; }
   :where(html.kdx-regalos) .gift-fields { grid-template-columns: 1fr; }
+  :where(html.kdx-regalos) .gift-selected-surprise dl { grid-template-columns: 1fr; }
 }
 @media (max-width: 760px) {
   :where(html.kdx-regalos) .gift-plans,
@@ -87,10 +96,9 @@
   :where(html.kdx-regalos) .gift-plan { padding: 26px; }
   :where(html.kdx-regalos) .gift-plan-description { min-height: 0; }
   :where(html.kdx-regalos) .gift-summary { position: static; }
-  :where(html.kdx-regalos) .gift-surprise-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   :where(html.kdx-regalos) .gift-extra { gap: 12px; }
   :where(html.kdx-regalos) .gift-extra select { flex-basis: 128px; width: 128px; }
 }
 @media (max-width: 400px) {
-  :where(html.kdx-regalos) .gift-surprise-grid { grid-template-columns: 1fr; }
+  :where(html.kdx-regalos) .gift-selected-surprise { padding: 20px; }
 }

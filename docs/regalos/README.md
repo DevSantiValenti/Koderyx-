@@ -25,7 +25,11 @@ Cada álbum tiene su propio tratamiento: papel y cinta en reconciliación, tarje
 
 La promoción está configurada para los primeros cinco clientes. **No hay contador ni reserva automática de cupos**: se confirma la disponibilidad por WhatsApp. Al completar los cinco pedidos, cambiar `giftOffer.active` a `false` y volver a compilar/publicar. Las tarjetas y el calculador pasarán a precios normales juntos.
 
-Los extras ya incluidos no se vuelven a cobrar. Elegir minijuego o carta como experiencia Premium incluye esa opción; la otra puede agregarse con su precio. Fotos adicionales se cobran por paquete de hasta 10, y las correcciones por ronda. El diseño exclusivo reemplaza la base de plantilla por un mínimo de $90.000; alcance y total final quedan a confirmar. Las extensiones se consultan por separado y no se suman al cálculo.
+Los extras ya incluidos no se vuelven a cobrar. El minijuego se ofrece únicamente como una de las experiencias incluidas en Premium; no aparece como extra independiente. La carta animada sí puede agregarse a otro plan. Fotos adicionales se cobran por paquete de hasta 10, y las correcciones por ronda. El diseño exclusivo reemplaza la base de plantilla por un mínimo de $90.000; alcance y total final quedan a confirmar. Las extensiones se consultan por separado y no se suman al cálculo.
+
+El extra de QR genera un código con el enlace definitivo de la página-regalo. Al escanearlo con la cámara del celular, abre esa página en el navegador. Se entrega como imagen para compartir o imprimir y se prepara después de publicar el sitio, ya que depende de su URL final. Si la URL cambia, hay que generar un QR nuevo.
+
+Las cuatro experiencias Premium son implementables en HTML, CSS y JavaScript, sin aplicación ni backend. Sus explicaciones viven en `giftSurprises`: `Nuestra historia` es la línea de tiempo interactiva; el regalo virtual es una caja animada; el minijuego puede ser de preguntas, memoria o rompecabezas; y la carta secreta se desbloquea con una secuencia breve. Cada opción define cómo funciona, qué material necesita y qué recibe la persona. Esa información se muestra al cambiar la selección en el presupuestador y se incluye en el mensaje de WhatsApp.
 
 El presupuesto no almacena datos, recibe archivos, reserva fechas ni realiza cobros. El visitante revisa y envía el texto en WhatsApp. Los medios se coordinan posteriormente. El anticipo y saldo muestran el 50% cada uno. La vigencia indicada es una condición comercial: no programa automáticamente la baja de sitios de clientes.
 
