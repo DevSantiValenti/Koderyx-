@@ -72,7 +72,8 @@ const CONFIG = {
   "edad": "",
   "tituloPrincipal": "La mejor parte:\nque estés ahí.",
   "bajada": "Hay motivos para brindar. Y uno de ellos es compartir este día con vos.",
-  "fechaEvento": "2027-12-18T21:00:00-03:00",
+  "fechaEvento": "",
+  "diasHastaEventoDemo": 7,
   "zonaHoraria": "America/Argentina/Cordoba",
   "etiquetaHorario": "Hora de Argentina",
   "fechaTextoDemo": "Fecha a confirmar",
@@ -90,35 +91,35 @@ const CONFIG = {
   "colorBorde": "#718b68",
   "fotos": [
     {
-      "src": "",
+      "src": "../imagenes-demo/invitacion-cumpleanos/01.jpg",
       "pie": "Una vuelta más al sol"
     },
     {
-      "src": "",
+      "src": "../imagenes-demo/invitacion-cumpleanos/02.jpg",
       "pie": "Una sonrisa para invitar"
     },
     {
-      "src": "",
+      "src": "../imagenes-demo/invitacion-cumpleanos/03.jpg",
       "pie": "La gente que quiero cerca"
     },
     {
-      "src": "",
+      "src": "../imagenes-demo/invitacion-cumpleanos/04.jpg",
       "pie": "Un recuerdo de otra fiesta"
     },
     {
-      "src": "",
+      "src": "../imagenes-demo/invitacion-cumpleanos/05.jpg",
       "pie": "Mis pequeños grandes momentos"
     },
     {
-      "src": "",
+      "src": "../imagenes-demo/invitacion-cumpleanos/06.jpg",
       "pie": "Siempre hay algo que celebrar"
     },
     {
-      "src": "",
+      "src": "../imagenes-demo/invitacion-cumpleanos/07.jpg",
       "pie": "Un brindis pendiente"
     },
     {
-      "src": "",
+      "src": "../imagenes-demo/invitacion-cumpleanos/08.jpg",
       "pie": "El próximo recuerdo, con vos"
     }
   ],
@@ -243,14 +244,21 @@ function parseEvent(value){
   const date=new Date(value);return Number.isFinite(date.getTime())?date:null;
 }
 if(!CONFIG.modoDemo)$('demoDetails').hidden=true;
-const event=parseEvent(CONFIG.fechaEvento);
-if(!CONFIG.fechaEvento){$('eventDate').textContent=CONFIG.fechaTextoDemo;}
+function demoEventDate(days){
+  const date=new Date();
+  date.setDate(date.getDate()+days);
+  date.setHours(21,0,0,0);
+  return date;
+}
+const event=CONFIG.modoDemo ? demoEventDate(CONFIG.diasHastaEventoDemo) : parseEvent(CONFIG.fechaEvento);
+if(!CONFIG.fechaEvento&&!CONFIG.modoDemo){$('eventDate').textContent=CONFIG.fechaTextoDemo;}
 else if(!event){$('eventDate').textContent='Fecha por confirmar';$('dateStatus').textContent='La fecha configurada no es válida. Confirmá los detalles con el anfitrión.';}
 else {
   let zoneOK=true;
   try {
-    $('eventDate').textContent=new Intl.DateTimeFormat('es-AR',{dateStyle:'full',timeZone:CONFIG.zonaHoraria}).format(event);
-    $('eventTime').textContent=new Intl.DateTimeFormat('es-AR',{hour:'2-digit',minute:'2-digit',hourCycle:'h23',timeZone:CONFIG.zonaHoraria}).format(event)+' h · '+CONFIG.etiquetaHorario;
+    const timeZone=CONFIG.modoDemo ? {} : {timeZone:CONFIG.zonaHoraria};
+    $('eventDate').textContent=new Intl.DateTimeFormat('es-AR',{dateStyle:'full',...timeZone}).format(event);
+    $('eventTime').textContent=new Intl.DateTimeFormat('es-AR',{hour:'2-digit',minute:'2-digit',hourCycle:'h23',...timeZone}).format(event)+' h · '+(CONFIG.modoDemo?'Hora local':CONFIG.etiquetaHorario);
   }catch{zoneOK=false;$('eventDate').textContent='Horario por confirmar';$('dateStatus').textContent='La zona horaria configurada no es válida. Confirmá el horario con el anfitrión.';}
   if(zoneOK){let timer;function tick(){const remaining=event.getTime()-Date.now();if(remaining<=0){$('countdown').hidden=true;$('dateStatus').textContent='La fecha de encuentro ya llegó. Consultá los detalles con el anfitrión.';clearInterval(timer);return;}const seconds=Math.floor(remaining/1000);$('countdown').hidden=false;$('dateStatus').textContent='';for(const[id,n]of Object.entries({days:Math.floor(seconds/86400),hours:Math.floor(seconds/3600)%24,minutes:Math.floor(seconds/60)%60,seconds:seconds%60}))$(id).textContent=String(n).padStart(2,'0');}tick();if(event.getTime()>Date.now())timer=setInterval(tick,1000);}
 }

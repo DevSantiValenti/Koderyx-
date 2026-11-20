@@ -10,6 +10,12 @@
 .pedido-noviazgo .hero{position:relative;overflow:hidden;min-height:720px;background:radial-gradient(ellipse at center,#ffe6ed,transparent 70%)}.pedido-noviazgo h1{white-space:pre-line;font-style:italic;font-size:clamp(4.4rem,10vw,8rem)}.pedido-noviazgo .hero .wrap{position:relative}.pedido-noviazgo .btn{border-radius:50px}.pedido-noviazgo .paper{border-radius:110px 110px 20px 20px;text-align:center;padding-top:70px;border-style:dashed}.love-stamp{position:absolute;right:1%;bottom:10%;width:115px;height:115px;border:1px dashed var(--accent);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:.7rem;line-height:1.3;transform:rotate(13deg)}.love-stamp b{font:italic 1.7rem Georgia}.heart-cloud span{position:absolute;font-size:5rem;animation:bob 4s ease-in-out infinite;left:4%;top:8%}.heart-cloud span:nth-child(2){left:84%;top:0;font-size:3rem;animation-delay:.6s}.heart-cloud span:nth-child(3){left:75%;top:50%;font-size:6rem;animation-delay:1s}.heart-cloud span:nth-child(4){left:16%;top:65%;font-size:2rem;animation-delay:1.5s}.heart-line{font-size:3rem;margin-bottom:35px;color:var(--accent)}.pedido-noviazgo #question{margin-top:35px}.pedido-noviazgo .tile{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:30px}.pedido-noviazgo .photo{border-radius:12px}.pedido-noviazgo .photo-art{border-radius:90px 90px 8px 8px}@keyframes bob{50%{transform:translateY(-15px) rotate(8deg)}}@media(max-width:760px){.pedido-noviazgo .hero{min-height:680px}.love-stamp{position:static;margin:35px auto 0;width:88px;height:88px}.heart-cloud span{font-size:2.4rem}.heart-cloud span:nth-child(3){font-size:3rem;left:85%;top:42%}}@media(max-width:760px){.pedido-noviazgo .hero h1{font-size:clamp(3.5rem,14vw,4.5rem)}.heart-cloud span{font-size:1.6rem!important;opacity:.45}.heart-cloud span:nth-child(1){left:0;top:2%}.heart-cloud span:nth-child(2){left:94%;top:0}.heart-cloud span:nth-child(3){left:95%;top:48%}.heart-cloud span:nth-child(4){left:0;top:auto;bottom:4%}}
 @media(min-width:761px){.heart-cloud span:nth-child(3){left:91%;top:43%;font-size:4rem}}
 
+.ambient-hearts{position:fixed;inset:0;z-index:1;overflow:hidden;pointer-events:none}
+.ambient-heart{position:absolute;left:var(--heart-x);top:-12vh;color:var(--accent);font:var(--heart-size) Georgia,serif;opacity:0;will-change:transform;animation:ambient-heart-fall var(--heart-duration) linear infinite;animation-delay:var(--heart-delay)}
+body.pedido-noviazgo>:not(.ambient-hearts){position:relative;z-index:2}
+@keyframes ambient-heart-fall{0%{opacity:0;transform:translate3d(0,-12vh,0) rotate(0)}12%{opacity:.16}82%{opacity:.12}100%{opacity:0;transform:translate3d(var(--heart-drift),112vh,0) rotate(320deg)}}
+@media(prefers-reduced-motion:reduce){.ambient-hearts{display:none}}
+
 .demo-request{max-width:760px;margin:0 auto;padding:30px 20px;text-align:center;border-top:1px solid var(--line)}.demo-request p{font-size:.85rem}.demo-request .btn{white-space:normal}
 
 /* Álbum personalizable: ocho espacios de muestra, sin imágenes externas. */
@@ -87,35 +93,35 @@ const CONFIG = {
   "colorBorde": "#e6b6c3",
   "fotos": [
     {
-      "src": "",
+      "src": "../imagenes-demo/pedido-noviazgo/01.jpg",
       "pie": "La primera sonrisa"
     },
     {
-      "src": "",
+      "src": "../imagenes-demo/pedido-noviazgo/02.jpg",
       "pie": "Ese café con vos"
     },
     {
-      "src": "",
+      "src": "../imagenes-demo/pedido-noviazgo/03.jpg",
       "pie": "Un paseo sin destino"
     },
     {
-      "src": "",
+      "src": "../imagenes-demo/pedido-noviazgo/04.jpg",
       "pie": "Nuestra foto favorita"
     },
     {
-      "src": "",
+      "src": "../imagenes-demo/pedido-noviazgo/05.jpg",
       "pie": "Una risa compartida"
     },
     {
-      "src": "",
+      "src": "../imagenes-demo/pedido-noviazgo/06.jpg",
       "pie": "Un plan improvisado"
     },
     {
-      "src": "",
+      "src": "../imagenes-demo/pedido-noviazgo/07.jpg",
       "pie": "Ese abrazo tan tuyo"
     },
     {
-      "src": "",
+      "src": "../imagenes-demo/pedido-noviazgo/08.jpg",
       "pie": "Todo lo que puede empezar"
     }
   ],
@@ -225,6 +231,21 @@ function celebrate(symbols=['♥','♡','✦']) {
   if(reducedMotion.matches || document.querySelector('.particle'))return;
   for(let i=0;i<24;i++) {const el=node('span',symbols[i%symbols.length],'particle');el.setAttribute('aria-hidden','true');el.style.setProperty('--x',(3+Math.random()*94)+'vw');el.style.setProperty('--delay',Math.random()*.45+'s');document.body.append(el);setTimeout(()=>el.remove(),3200);}
 }
+function startAmbientHearts(){
+  if(reducedMotion.matches)return;
+  const layer=node('div',undefined,'ambient-hearts');layer.setAttribute('aria-hidden','true');
+  for(let i=0;i<12;i++){
+    const heart=node('span',i%3===0?'♥':'♡','ambient-heart');
+    heart.style.setProperty('--heart-x',(2+Math.random()*96)+'vw');
+    heart.style.setProperty('--heart-size',(14+Math.random()*18)+'px');
+    heart.style.setProperty('--heart-duration',(10+Math.random()*7)+'s');
+    heart.style.setProperty('--heart-delay',(-Math.random()*16)+'s');
+    heart.style.setProperty('--heart-drift',(-35+Math.random()*70)+'px');
+    layer.append(heart);
+  }
+  document.body.prepend(layer);
+}
+startAmbientHearts();
 document.querySelectorAll('a[href^="#"]').forEach(link=>link.addEventListener('click',()=>{
   const target=document.querySelector(link.getAttribute('href'));if(target){target.classList.remove('arriving');requestAnimationFrame(()=>target.classList.add('arriving'));target.focus({preventScroll:true});}
 }));

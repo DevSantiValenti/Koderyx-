@@ -17,9 +17,11 @@ await context.route('**/*', async (route) => {
   const file = resolve(root, '.' + url.pathname);
   assert(file.startsWith(root + '/'));
   if (url.pathname.endsWith('/missing.jpg')) return route.fulfill({ status: 404, body: '' });
-  let html = await readFile(file, 'utf8');
+  const extension = extname(file);
+  let body = await readFile(file);
+  let html = extension === '.html' ? body.toString('utf8') : null;
   const variant = url.searchParams.get('photos');
-  if (variant) {
+  if (variant && html) {
     const match = html.match(/const CONFIG = (\{.*?\n\});/s);
     const config = JSON.parse(match[1]);
     config.fotos = variant === 'empty' ? [] : Array.from({ length: variant === 'many' ? 25 : 8 }, (_, i) => ({
@@ -27,8 +29,10 @@ await context.route('**/*', async (route) => {
       pie: `Recuerdo ${i + 1}`, alt: `Fotografía de prueba ${i + 1}`,
     }));
     html = html.replace(match[0], 'const CONFIG = ' + JSON.stringify(config) + ';');
+    body = Buffer.from(html);
   }
-  await route.fulfill({ contentType: extname(file) === '.html' ? 'text/html' : 'text/plain', body: html });
+  const contentTypes = { '.html': 'text/html', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.svg': 'image/svg+xml', '.mp3': 'audio/mpeg' };
+  await route.fulfill({ contentType: contentTypes[extension] ?? 'application/octet-stream', body });
 });
 const page = await context.newPage();
 page.on('pageerror', (error) => errors.push(error.message));
@@ -62,6 +66,12 @@ try {
       await page.setViewportSize({ width, height: 1000 });
       await page.goto(url);
       assert.equal(await page.locator('[data-photo-group] figure').count(), 8);
+      assert.equal(await page.locator('[data-photo-group] img').count(), 8);
+      for (const image of await page.locator('[data-photo-group] img').all()) {
+        await image.scrollIntoViewIfNeeded();
+        await image.evaluate((element) => element.decode());
+      }
+      assert(await page.locator('[data-photo-group] img').evaluateAll((images) => images.every((image) => image.complete && image.naturalWidth > 0)), 'Default demo photos must load');
       assert.equal(await page.locator('h1').count(), 1);
       const distribution = await page.locator('[data-photo-group]').evaluateAll((groups) => ({
         counts: groups.map((group) => group.querySelectorAll('figure').length),

@@ -7,6 +7,7 @@
 - `src/data/gifts.ts` es la fuente de títulos, categorías y textos de las cinco experiencias.
 - `src/styles/regalos.css` conserva los estilos originales, activados solo con `html.kdx-regalos`.
 - `public/regalos/plantillas/` contiene las demos HTML autónomas que se copian sin framework ni dependencias.
+- `public/regalos/imagenes-demo/` contiene ocho fotografías temáticas locales para cada demo y el registro de sus fuentes.
 - `private/regalos/` guarda el prototipo fuente y su referencia. Está en `.gitignore` y no forma parte del sitio publicado.
 
 ## Editar el catálogo
@@ -15,9 +16,9 @@ Para agregar o cambiar una experiencia comercial, editar `src/data/gifts.ts`. El
 
 Cada demo mantiene su objeto `CONFIG` dentro de su archivo HTML. Ahí se editan nombres, mensajes, colores, fotos, audio opcional y ajustes del modelo. Los textos se insertan como texto, no como HTML. Las demos están marcadas `noindex,follow`; se excluyen deliberadamente del sitemap aunque estén disponibles para mostrar el producto.
 
-Las cinco plantillas incluyen ocho espacios de fotografía por defecto en `CONFIG.fotos`, también la invitación de cumpleaños. Se distribuyen en cuatro pares entre distintas secciones de cada página (carta, recuerdos, historia o cierre, según el modelo), conservando el orden de la lista. Cada ubicación usa `data-photo-group`. Reemplazar cada `src` vacío por la ruta de su imagen y editar `pie` (y opcionalmente `alt`). Se pueden agregar más entradas para otros planes: todas se reparten de forma equilibrada entre las cuatro ubicaciones, sin recortarlas. Si la lista está vacía, se muestran ocho espacios de muestra. Una lista personalizada conserva la cantidad elegida y las ubicaciones sin fotos se ocultan.
+Las cinco plantillas incluyen ocho fotografías de muestra por defecto en `CONFIG.fotos`, también la invitación de cumpleaños. Se distribuyen en cuatro pares entre distintas secciones de cada página (carta, recuerdos, historia o cierre, según el modelo), conservando el orden de la lista. Cada ubicación usa `data-photo-group`. En una entrega, reemplazar cada `src` por la ruta de la fotografía autorizada del cliente y editar `pie` (y opcionalmente `alt`). Se pueden agregar más entradas para otros planes: todas se reparten de forma equilibrada entre las cuatro ubicaciones, sin recortarlas. Si la lista está vacía, se muestran ocho espacios de muestra. Una lista personalizada conserva la cantidad elegida y las ubicaciones sin fotos se ocultan.
 
-Cada álbum tiene su propio tratamiento: papel y cinta en reconciliación, tarjetas románticas en noviazgo, mosaico festivo en cumpleaños, postales en invitación y marcos editoriales en matrimonio. Los detalles se mantienen dentro de cada HTML para conservar entregas autónomas. No se agregaron imágenes externas ni dependencias.
+Cada álbum tiene su propio tratamiento: papel y cinta en reconciliación, tarjetas románticas en noviazgo, mosaico festivo en cumpleaños, postales en invitación y marcos editoriales en matrimonio. Los detalles se mantienen dentro de cada HTML para conservar entregas autónomas. Las fotografías de muestra se sirven como archivos locales; las plantillas no dependen de servidores externos para mostrarlas.
 
 ## Planes y presupuestos
 
